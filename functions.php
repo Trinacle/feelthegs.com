@@ -18,7 +18,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'FTGS_VERSION', '1.0.0' );
+define( 'FTGS_VERSION', '1.0.1' );
 define( 'FTGS_DIR', get_stylesheet_directory() );
 define( 'FTGS_URI', get_stylesheet_directory_uri() );
 
@@ -131,6 +131,36 @@ function ftgs_theme_setup() {
         'footer_help'  => __( 'Footer: Help', 'feelthegs' ),
         'footer_about' => __( 'Footer: About', 'feelthegs' ),
     ) );
+}
+
+/* ---------- Redirect dead /product-category/* URLs to /collections/* ----------
+ * The live site serves real category pages at /collections/{slug}/ (a Shopify-
+ * migration rewrite). The WC-default /product-category/{slug}/ URLs fall through
+ * to WP attachment matching, where Yoast's attachment_redirect then 301s them to
+ * the matching .jpg attachment file (e.g. /product-category/dildos/ -> Dildos.jpg).
+ * That's broken. Redirect /product-category/* to the correct /collections/* URL
+ * with a 301 so SEO link equity flows to the right place.
+ */
+add_action( 'template_redirect', 'ftgs_redirect_product_category_to_collections', 1 );
+function ftgs_redirect_product_category_to_collections() {
+    if ( is_admin() ) return;
+    $req = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+    if ( preg_match( '#^/product-category/([a-z0-9\-]+)/?#i', $req, $m ) ) {
+        $slug = $m[1];
+        // Confirm the term exists before redirecting.
+        $term = get_term_by( 'slug', $slug, 'product_cat' );
+        if ( $term && ! is_wp_error( $term ) ) {
+            // Build the /collections/{slug}/ URL preserving query string (filters, paging).
+            $qs = '';
+            $qpos = strpos( $req, '?' );
+            if ( false !== $qpos ) {
+                $qs = substr( $req, $qpos );
+            }
+            $dest = home_url( '/collections/' . $slug . '/' ) . $qs;
+            wp_safe_redirect( $dest, 301 );
+            exit;
+        }
+    }
 }
 
 /* ---------- Remove Astra header/footer entirely (we render our own) ---------- */
