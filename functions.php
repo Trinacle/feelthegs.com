@@ -317,10 +317,19 @@ function ftgs_yoast_homepage_og_desc( $desc ) {
     return $desc;
 }
 
-/* ---------- Enhanced JSON-LD schema (complements Yoast's graph) ---------- */
+/* ---------- Enhanced JSON-LD schema (complements Yoast's graph) ----------
+ * NOTE: 'Schema & Structured Data for WP' plugin is active on feelthegs and
+ * handles Organization / Product / Breadcrumb schema. To avoid duplicate or
+ * conflicting schema, the theme yields to the plugin when it's active and only
+ * outputs its own minimal Organization + WebSite schema otherwise.
+ */
 add_action( 'wp_head', 'ftgs_schema', 20 );
 function ftgs_schema() {
     if ( is_admin() ) {
+        return;
+    }
+    // Yield to the dedicated schema plugin if active.
+    if ( defined( 'SASWP_VERSION' ) || class_exists( 'schema_for_wp' ) ) {
         return;
     }
     $home = home_url( '/' );
