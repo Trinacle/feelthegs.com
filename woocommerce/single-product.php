@@ -2,14 +2,14 @@
 /**
  * The template for displaying a single WooCommerce product.
  *
- * Bespoke ProductPro product page — premium two-column layout with a
- * sticky gallery, integrated cart, trust badges, dropship/wholesale CTAs,
- * tabbed description/specs/reviews, and a related-products rail.
+ * Feel The G's product page — premium two-column layout with a sticky gallery,
+ * integrated cart form, retail trust badges (discreet shipping / secure /
+ * body-safe), tabbed description/specs/reviews, and a related-products rail.
  *
- * Still fires the WooCommerce cart form (woocommerce_template_single_add_to_cart)
- * so add-to-cart, variations, and AJAX all work normally.
+ * Fires the WooCommerce cart form (woocommerce_template_single_add_to_cart) so
+ * add-to-cart, variations, and AJAX all work normally.
  *
- * @package ProductPro
+ * @package FeelTheGs
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -21,7 +21,7 @@ while ( have_posts() ) :
     $product = wc_get_product( get_the_ID() );
     if ( ! $product ) break;
 
-    $brand_terms = get_the_terms( get_the_ID(), 'product_brand' );
+    $brand_terms = get_the_terms( get_the_ID(), 'pa_brand' );
     $brand_name  = ( $brand_terms && ! is_wp_error( $brand_terms ) ) ? $brand_terms[0]->name : '';
     $brand_link  = ( $brand_terms && ! is_wp_error( $brand_terms ) ) ? get_term_link( $brand_terms[0] ) : '';
 
@@ -33,7 +33,6 @@ while ( have_posts() ) :
     $sku         = $product->get_sku();
     $weight      = $product->get_weight();
     $dimensions  = array_filter( array( $product->get_length(), $product->get_width(), $product->get_height() ) );
-    $register    = 'https://app.f13commerce.com/register';
     $shop_url    = get_permalink( wc_get_page_id( 'shop' ) );
     $is_variable = $product->is_type( 'variable' );
     ?>
@@ -42,7 +41,7 @@ while ( have_posts() ) :
 
       <!-- BREADCRUMB -->
       <div class="wrap product-crumb">
-        <a href="<?php echo esc_url( $shop_url ); ?>">Marketplace</a>
+        <a href="<?php echo esc_url( $shop_url ); ?>">Shop</a>
         <?php if ( $cat_names ) : ?><span class="sep">/</span><span><?php echo esc_html( $cat_names ); ?></span><?php endif; ?>
         <?php if ( $brand_name && $brand_link && ! is_wp_error( $brand_link ) ) : ?><span class="sep">/</span><a href="<?php echo esc_url( $brand_link ); ?>"><?php echo esc_html( $brand_name ); ?></a><?php endif; ?>
       </div>
@@ -95,20 +94,11 @@ while ( have_posts() ) :
                   <?php woocommerce_template_single_add_to_cart(); ?>
               </div>
 
-              <!-- Dropship + Wholesale CTAs -->
-              <div class="action-row">
-                <a href="<?php echo esc_url( $register ); ?>" class="btn btn-lime btn-lg btn-dropship">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 9v11h14V9"/></svg>
-                  Dropship this product
-                </a>
-                <a href="<?php echo esc_url( $register ); ?>" class="btn btn-outline btn-lg btn-wholesale">Buy wholesale</a>
-              </div>
-
-              <!-- Trust badges -->
+              <!-- Trust badges (retail: discreet shipping, secure, body-safe) -->
               <div class="trust-mini">
-                <div class="tm-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span>Auto inventory sync</span></div>
-                <div class="tm-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/><polyline points="9 12 11 14 15 10"/></svg><span>Blind dropshipping</span></div>
-                <div class="tm-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>No transaction fees</span></div>
+                <div class="tm-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Discreet shipping</span></div>
+                <div class="tm-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/><polyline points="9 12 11 14 15 10"/></svg><span>Secure checkout</span></div>
+                <div class="tm-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Body-safe materials</span></div>
               </div>
 
               <!-- Quick specs -->
@@ -171,7 +161,7 @@ while ( have_posts() ) :
       // Related products — same brand, fallback to same category, fallback to recent.
       $related_args = array( 'status' => 'publish', 'limit' => 4, 'orderby' => 'rand', 'exclude' => array( get_the_ID() ) );
       if ( $brand_terms && ! is_wp_error( $brand_terms ) ) {
-          $related_args['product_brand'] = $brand_terms[0]->slug;
+          $related_args['pa_brand'] = $brand_terms[0]->slug;
       } elseif ( $cat_terms && ! is_wp_error( $cat_terms ) ) {
           $related_args['category'] = array( $cat_terms[0]->slug );
       }
@@ -180,17 +170,17 @@ while ( have_posts() ) :
           ?>
           <section class="sec product-related-sec" style="background:var(--bg-2);">
             <div class="wrap">
-              <h2 class="h-sec reveal" style="font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:32px;"><?php echo $brand_name ? 'More from ' . esc_html( $brand_name ) : 'Related products'; ?></h2>
+              <h2 class="h-sec reveal" style="font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:32px;"><?php echo $brand_name ? 'More from ' . esc_html( $brand_name ) : 'You may also like'; ?></h2>
               <div class="market">
                 <?php
                 $d = array( '', ' reveal-d1', ' reveal-d2', ' reveal-d3' );
                 foreach ( $related as $i => $rel ) {
-                    $rb = get_the_terms( $rel->get_id(), 'product_brand' );
+                    $rb = get_the_terms( $rel->get_id(), 'pa_brand' );
                     $rbname = ( $rb && ! is_wp_error( $rb ) ) ? $rb[0]->name : '';
                     ?>
                     <a href="<?php echo esc_url( $rel->get_permalink() ); ?>" class="market-card reveal<?php echo esc_attr( $d[ $i % 4 ] ); ?>" style="text-decoration:none;color:inherit;">
                       <div class="mimg">
-                        <?php $img = wp_get_attachment_image_url( $rel->get_image_id(), 'woocommerce_thumbnail' ) ?: sdn_product_placeholder_url(); ?>
+                        <?php $img = wp_get_attachment_image_url( $rel->get_image_id(), 'woocommerce_thumbnail' ) ?: ftgs_product_placeholder_url(); ?>
                         <img src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $rel->get_name() ); ?>" loading="lazy">
                       </div>
                       <div class="mbody">
