@@ -1,10 +1,15 @@
 name: Deploy theme to server
 
-# Push to main -> theme is live on feelthegs.com automatically.
+# Push to main -> theme files are synced to feelthegs.com via SFTP.
 # Also runnable on demand from the Actions tab (workflow_dispatch).
 #
 # Server: feelthegs.com on PrivateSystems (cp54-ga.privatesystems.net), cPanel
 # user `feelthg`, behind Cloudflare + LiteSpeed Cache.
+#
+# IMPORTANT: bash/shell access is DISABLED on this cPanel account (only SFTP
+# works). So we can't use rsync, ssh, or WP-CLI. This pipeline uploads files
+# via SFTP (lftp mirror) instead. The LiteSpeed cache is purged via an HTTP
+# request once files are uploaded.
 #
 # Required GitHub secrets: SSH_HOST, SSH_USER, SSH_PORT, SSH_KEY (private ed25519),
 # DEPLOY_PATH (absolute server path to the theme dir, e.g.
@@ -31,16 +36,14 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/id_deploy
-          chmod 600 ~/.ssh/id_deploy
-          # Only ever offer THIS key (fixes "Too many authentication failures"),
-          # and auto-accept the host key on first contact.
+          printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
           cat > ~/.ssh/config <<EOF
           Host deploy
             HostName ${{ secrets.SSH_HOST }}
             User ${{ secrets.SSH_USER }}
             Port ${{ secrets.SSH_PORT }}
-            IdentityFile ~/.ssh/id_deploy
+            IdentityFile ~/.ssh/key
             IdentitiesOnly yes
             PreferredAuthentications publickey
             StrictHostKeyChecking accept-new
@@ -48,23 +51,30 @@ jobs:
           EOF
           chmod 600 ~/.ssh/config
 
-      - name: Test SSH connection
-        run: |
-          ssh deploy 'echo "connected as $(whoami) on $(hostname)"; ls -la "${{ secrets.DEPLOY_PATH }}" 2>/dev/null || echo "DEPLOY_PATH not found yet (rsync will create it)"'
+      - name: Install lftp (SFTP mirror client)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-      - name: Rsync theme to server
+      - name: Mirror theme to server via SFTP
+        # lftp mirror uploads only changed files (rsync-like over SFTP).
+        # --no-perms avoids chmod errors (the cPanel account can't chmod some files).
         run: |
-          rsync -avz --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.cpanel.yml' \
-            --exclude='README.md' \
-            --exclude='.htaccess' \
-            --exclude='.gitignore' \
-            -e "ssh" \
-            ./ "deploy:${{ secrets.DEPLOY_PATH }}/"
+          lftp -c "
+            set sftp:auto-confirm yes;
+            set sftp:connect-program 'ssh -a -x -i ~/.ssh/key -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=accept-new -o IdentitiesOnly=yes';
+            open sftp://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }};
+            mirror --reverse --verbose --no-perms --no-symlinks \
+              --exclude-glob '.git/' \
+              --exclude-glob '.github/' \
+              --exclude-glob 'README.md' \
+              --exclude-glob '.gitignore' \
+              --exclude-glob '.cpanel.yml' \
+              --exclude-glob '.htaccess' \
+              ./ ${{ secrets.DEPLOY_PATH }}/;
+            quit;
+          "
 
-      - name: Fix file permissions + purge LiteSpeed cache
-        continue-on-error: true
+      - name: Purge LiteSpeed cache
+        if: always()
         run: |
-          ssh deploy "chmod -R 755 ${{ secrets.DEPLOY_PATH }} && find ${{ secrets.DEPLOY_PATH }} -type f -exec chmod 644 {} \; && touch ${{ secrets.DEPLOY_PATH }}/../../cache/.litespeed_purgeall 2>/dev/null; echo done"
+          curl -s -A "Mozilla/5.0" "https://feelthegs.com/?litespeed_purgeall=1" -o /dev/null || true
+          echo "LiteSpeed purge triggered."
