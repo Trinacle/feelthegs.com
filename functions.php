@@ -42,6 +42,55 @@ function ftgs_register_shop_sidebar() {
     ) );
 }
 
+/* ---------- On theme activation: seed sensible filter defaults on all categories ----------
+ * Runs once (gated by an option) when the theme goes active. Sets per-category
+ * filter config via ACF term meta: price slider on, plus the attribute groups
+ * that make sense store-wide. Each category is then individually tunable in
+ * Products → Categories → "Collection Filter Config".
+ */
+add_action( 'after_switch_theme', 'ftgs_seed_filter_defaults' );
+function ftgs_seed_filter_defaults() {
+    if ( get_option( 'ftgs_filter_seeded' ) ) {
+        return;
+    }
+    if ( ! function_exists( 'get_terms' ) || ! function_exists( 'update_field' ) ) {
+        return; // no ACF yet — admin can re-run by deleting the option
+    }
+
+    // Default attribute groups (slug, heading, style) shown on every category.
+    $default_groups = array(
+        array( 'slug' => 'color',         'heading' => 'Color',          'style' => 'swatch',   'terms' => '' ),
+        array( 'slug' => 'size',          'heading' => 'Size',           'style' => 'checkbox', 'terms' => '' ),
+        array( 'slug' => 'material',      'heading' => 'Material',       'style' => 'checkbox', 'terms' => '' ),
+        array( 'slug' => 'brand',         'heading' => 'Brand',          'style' => 'checkbox', 'terms' => '' ),
+        array( 'slug' => 'features',      'heading' => 'Features',       'style' => 'checkbox', 'terms' => '' ),
+        array( 'slug' => 'product-type',  'heading' => 'Type',           'style' => 'checkbox', 'terms' => '' ),
+    );
+
+    $cats = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => false, 'number' => 0 ) );
+    if ( is_wp_error( $cats ) ) {
+        return;
+    }
+    foreach ( $cats as $cat ) {
+        update_field( 'ftgs_filter_enable', 1, $cat );
+        update_field( 'ftgs_price_display', 1, $cat );
+        update_field( 'ftgs_price_min', 0, $cat );   // 0 = auto-detect
+        update_field( 'ftgs_price_max', 0, $cat );   // 0 = auto-detect
+        update_field( 'ftgs_price_step', 5, $cat );
+        update_field( 'ftgs_deals_display', 1, $cat );
+        // Build the repeater rows in ACF's expected format.
+        $rows = array();
+        foreach ( $default_groups as $g ) {
+            // Only include attribute groups whose taxonomy actually exists.
+            if ( taxonomy_exists( 'pa_' . $g['slug'] ) ) {
+                $rows[] = $g;
+            }
+        }
+        update_field( 'ftgs_attr_groups', $rows, $cat );
+    }
+    update_option( 'ftgs_filter_seeded', 1 );
+}
+
 /* ---------- Newsletter subscribers CPT (fallback storage) ---------- */
 add_action( 'init', 'ftgs_register_sub_cpt' );
 function ftgs_register_sub_cpt() {
