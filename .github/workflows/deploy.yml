@@ -1,0 +1,70 @@
+name: Deploy theme to server
+
+# Push to main -> theme is live on feelthegs.com automatically.
+# Also runnable on demand from the Actions tab (workflow_dispatch).
+#
+# Server: feelthegs.com on PrivateSystems (cp54-ga.privatesystems.net), cPanel
+# user `feelthg`, behind Cloudflare + LiteSpeed Cache.
+#
+# Required GitHub secrets: SSH_HOST, SSH_USER, SSH_PORT, SSH_KEY (private ed25519),
+# DEPLOY_PATH (absolute server path to the theme dir, e.g.
+# /home/feelthg/public_html/wp-content/themes/feelthegs).
+# Required GitHub variable: DEPLOY_ENABLED=true (set once secrets are added).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-feelthegs
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          # Only ever offer THIS key (fixes "Too many authentication failures"),
+          # and auto-accept the host key on first contact.
+          cat > ~/.ssh/config <<EOF
+          Host deploy
+            HostName ${{ secrets.SSH_HOST }}
+            User ${{ secrets.SSH_USER }}
+            Port ${{ secrets.SSH_PORT }}
+            IdentityFile ~/.ssh/id_deploy
+            IdentitiesOnly yes
+            PreferredAuthentications publickey
+            StrictHostKeyChecking accept-new
+            UserKnownHostsFile ~/.ssh/known_hosts
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Test SSH connection
+        run: |
+          ssh deploy 'echo "connected as $(whoami) on $(hostname)"; ls -la "${{ secrets.DEPLOY_PATH }}" 2>/dev/null || echo "DEPLOY_PATH not found yet (rsync will create it)"'
+
+      - name: Rsync theme to server
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.cpanel.yml' \
+            --exclude='README.md' \
+            --exclude='.htaccess' \
+            --exclude='.gitignore' \
+            -e "ssh" \
+            ./ "deploy:${{ secrets.DEPLOY_PATH }}/"
+
+      - name: Fix file permissions + purge LiteSpeed cache
+        continue-on-error: true
+        run: |
+          ssh deploy "chmod -R 755 ${{ secrets.DEPLOY_PATH }} && find ${{ secrets.DEPLOY_PATH }} -type f -exec chmod 644 {} \; && touch ${{ secrets.DEPLOY_PATH }}/../../cache/.litespeed_purgeall 2>/dev/null; echo done"

@@ -1,0 +1,90 @@
+/*
+Theme Name: Feel The G's
+Theme URI: https://feelthegs.com
+Author: Trinacle
+Author URI: https://trinacle.com
+Description: Bespoke dark editorial theme for Feel The G's — adult boutique (sex toys, lingerie, bondage). Purple + gold brand system, light/dark toggle, mega menu, and a Fantasies-Boutique-style collection filter rebuilt natively for WooCommerce.
+Template: astra
+Version: 1.0.0
+License: GPL v2 or later
+Text Domain: feelthegs
+*/
+
+/* ==========================================================================
+   Design Tokens (consumed by assets/css/styles.css)
+   Brand palette extracted from the live feelthegs.com: vibrant purple #7034fd
+   with a warm gold accent #fedb62. Token names keep the --green* family so the
+   existing styles.css (which references --green* everywhere) keeps working —
+   only the hex values change.
+   ========================================================================== */
+:root {
+  --bg: #08090a;
+  --bg-2: #0f1112;
+  --bg-3: #16191a;
+  --bg-card: #1c2022;
+  --bg-elev: #232829;
+  --line: rgba(255,255,255,.08);
+  --line-2: rgba(255,255,255,.14);
+  --ink: #f5f6f5;
+  --ink-dim: #aab0ac;
+  --ink-mute: #6c736e;
+  /* Brand accent ramp — Feel The G's purple (#7034fd family).
+     Names stay as --green* so styles.css works untouched; values are purple. */
+  --green: #5a2bd6;       /* PRIMARY — deep brand purple      */
+  --green-d: #451fab;     /* darker purple                   */
+  --green-l: #8b5cf6;     /* lighter purple                  */
+  --green-xl: #7034fd;    /* bright accent (main CTA / glow) */
+  --green-glow: rgba(112,52,253,.45);
+  --gold: #fedb62;        /* secondary accent — gold         */
+  --gold-d: #d9b341;
+  --gold-glow: rgba(254,219,98,.35);
+  --cream: #faf5e5;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --display: 'Inter Tight', 'Inter', sans-serif;
+  --r-sm: 10px; --r-md: 16px; --r-lg: 24px; --r-xl: 32px; --r-2xl: 40px; --r-pill: 999px;
+  --sh-glow: 0 0 0 1px rgba(112,52,253,.4), 0 20px 60px -10px rgba(112,52,253,.35);
+  --sh-card: 0 20px 50px -20px rgba(0,0,0,.8);
+  --sh-lift: 0 30px 80px -20px rgba(0,0,0,.6);
+  --ease: cubic-bezier(.22,1,.36,1);
+  --ease-2: cubic-bezier(.16,1,.3,1);
+  --ease-bounce: cubic-bezier(.34,1.56,.64,1);
+}
+
+/* Light mode overrides */
+html.light {
+  --bg: #f7f8f6;
+  --bg-2: #ffffff;
+  --bg-3: #f0f2ef;
+  --bg-card: #ffffff;
+  --bg-elev: #ffffff;
+  --line: rgba(0,0,0,.08);
+  --line-2: rgba(0,0,0,.14);
+  --ink: #1d1d1f;
+  --ink-dim: #515154;
+  --ink-mute: #6e6e73;
+  --green-glow: rgba(112,52,253,.2);
+  --gold-glow: rgba(254,219,98,.25);
+}
+
+/* ==========================================================================
+   WordPress + Astra overrides
+   Strip Astra's default styling so our dark theme controls the look.
+   ========================================================================== */
+body.ast-header-break-point,
+body { background: var(--bg) !important; color: var(--ink) !important; font-family: var(--sans) !important; }
+
+/* Hide Astra's default header + footer (we provide our own) */
+.ast-header-sticked, .site-header-focus-item, #ast-desktop-header, #ast-mobile-header,
+.ast-footer-overlay, #colophon, .astra-advanced-hook-footer, .astra-advanced-hook-header { display: none !important; }
+
+/* Reset Astra content width to full for our templates */
+.ast-container, .site-content { max-width: none !important; padding: 0 !important; }
+.ast-separate-container .ast-article-post, .ast-separate-container .ast-article-single { background: transparent !important; }
+
+/* Our theme wraps everything in its own .wrap */
+.entry-content { margin: 0 !important; padding: 0 !important; }
+.entry-header { display: none; } /* We render our own headers */
+.ast-single .entry-header { display: none; }
+
+/* WooCommerce: remove default wrappers that conflict */
+.woocommerce #primary, .woocommerce-page #primary { width: 100% !important; float: none !important; padding: 0 !important; }

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#141614"/>
+  <rect x="1" y="1" width="598" height="598" fill="none" stroke="#2a2d2a" stroke-width="2" rx="16"/>
+  <text x="300" y="300" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" fill="#e55d5c" text-anchor="middle" letter-spacing="0.5">PRODUCTPRO</text>
+  <text x="300" y="340" font-family="Inter, Arial, sans-serif" font-size="18" fill="#868886" text-anchor="middle">Create a free account</text>
+  <text x="300" y="368" font-family="Inter, Arial, sans-serif" font-size="18" fill="#868886" text-anchor="middle">to view this product</text>
+</svg>

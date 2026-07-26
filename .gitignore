@@ -1,0 +1,22 @@
+# Scratch / dev files
+*.log
+*.cache
+.DS_Store
+node_modules/
+.sass-cache/
+
+# Local secrets — never commit
+.env
+*.pem
+*.key
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+
+# WordPress-generated (the server owns these, not git)
+uploads/
+upgrade/
+# Cache files LiteSpeed may drop into the theme dir
+*.litespeed
