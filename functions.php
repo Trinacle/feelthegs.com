@@ -18,7 +18,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'FTGS_VERSION', '1.0.1' );
+define( 'FTGS_VERSION', '1.1.0' );
 define( 'FTGS_DIR', get_stylesheet_directory() );
 define( 'FTGS_URI', get_stylesheet_directory_uri() );
 
@@ -209,7 +209,15 @@ function ftgs_strip_builder_assets() {
 
     // Never touch our own assets, the admin bar, core icon fonts, or the
     // WooCommerce runtime (needed for cart / filter AJAX).
-    $keep = array( 'ftgs-', 'sdn-', 'admin-bar', 'dashicons', 'wc-', 'woocommerce', 'jquery', 'js-cookie', 'sourcebuster', 'selectWoo', 'select-woo' );
+    // Modern Cart Starter (moderncart-) drives the slide-out cart drawer —
+    // stripping it breaks add-to-cart. CartFlows + FiboSearch also run cart
+    // logic and must be preserved.
+    $keep = array(
+        'ftgs-', 'sdn-', 'admin-bar', 'dashicons',
+        'wc-', 'woocommerce', 'jquery', 'js-cookie', 'sourcebuster',
+        'selectWoo', 'select-woo',
+        'moderncart-', 'cartflows', 'fibosearch', 'dgwt-wcasa',  // cart + search plugins
+    );
 
     foreach ( array( 'styles', 'scripts' ) as $type ) {
         $dep = 'styles' === $type ? wp_styles() : wp_scripts();
@@ -277,10 +285,14 @@ function ftgs_default_orderby_latest() {
 }
 
 /* ---------- Hide out-of-stock products from the shop ----------
- * Keeps pagination / result counts honest.
+ * Keeps pagination / result counts honest. Skipped during AJAX (Modern Cart's
+ * recommendation queries run on admin-ajax and shouldn't be filtered).
  */
 add_action( 'woocommerce_product_query', 'ftgs_hide_out_of_stock' );
 function ftgs_hide_out_of_stock( $q ) {
+    if ( wp_doing_ajax() ) {
+        return;
+    }
     $meta_query = $q->get( 'meta_query' );
     $meta_query[] = array(
         'key'     => '_stock_status',
@@ -297,6 +309,9 @@ function ftgs_hide_out_of_stock( $q ) {
  */
 add_action( 'woocommerce_product_query', 'ftgs_hide_no_image_products' );
 function ftgs_hide_no_image_products( $q ) {
+    if ( wp_doing_ajax() ) {
+        return;
+    }
     $meta_query   = $q->get( 'meta_query' );
     $meta_query[] = array(
         'key'     => '_thumbnail_id',

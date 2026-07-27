@@ -48,6 +48,18 @@ Text Domain: feelthegs
   --ease: cubic-bezier(.22,1,.36,1);
   --ease-2: cubic-bezier(.16,1,.3,1);
   --ease-bounce: cubic-bezier(.34,1.56,.64,1);
+
+  /* Modern Cart Starter (slide-out drawer) — brand the drawer gold-on-black */
+  --moderncart-primary-color: var(--gold);
+  --moderncart-heading-color: var(--ink);
+  --moderncart-body-color: var(--ink-dim);
+  --moderncart-background-color: var(--bg);
+  --moderncart-highlight-color: var(--gold);
+  --moderncart-button-font-color: #0a0a0a;
+  --moderncart-floating-icon-bg-color: var(--gold);
+  --moderncart-floating-icon-color: #0a0a0a;
+  --moderncart-floating-count-bg-color: var(--ink);
+  --moderncart-floating-count-text-color: var(--gold);
 }
 
 /* Light mode overrides */

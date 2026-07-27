@@ -63,10 +63,11 @@ if ( is_wp_error( $ftgs_foot_cats ) ) {
             </div>
             <div class="foot-col">
                 <h5>About</h5>
-                <a href="<?php echo esc_url( home_url( '/about' ) ); ?>">Our Story</a>
-                <a href="<?php echo esc_url( home_url( '/discreet-shipping' ) ); ?>">Discreet Shipping</a>
-                <a href="<?php echo esc_url( home_url( '/privacy-policy' ) ); ?>">Privacy Policy</a>
-                <a href="<?php echo esc_url( home_url( '/terms-of-use' ) ); ?>">Terms of Use</a>
+                <a href="<?php echo esc_url( home_url( '/about-us' ) ); ?>">Our Story</a>
+                <a href="<?php echo esc_url( home_url( '/shipping-policy' ) ); ?>">Shipping Policy</a>
+                <a href="<?php echo esc_url( home_url( '/privacy' ) ); ?>">Privacy Policy</a>
+                <a href="<?php echo esc_url( home_url( '/terms' ) ); ?>">Terms of Service</a>
+                <a href="<?php echo esc_url( home_url( '/return-policy' ) ); ?>">Return Policy</a>
             </div>
             <div class="foot-col">
                 <h5>Resources</h5>
@@ -78,8 +79,8 @@ if ( is_wp_error( $ftgs_foot_cats ) ) {
 
         <div class="foot-bottom">
             <div>&copy; <span data-year><?php echo esc_html( date( 'Y' ) ); ?></span> Feel The G's. &nbsp;
-                <a href="<?php echo esc_url( home_url( '/privacy-policy' ) ); ?>" style="color:var(--ink-mute);">Privacy</a> &middot;
-                <a href="<?php echo esc_url( home_url( '/terms-of-use' ) ); ?>" style="color:var(--ink-mute);">Terms</a> &middot;
+                <a href="<?php echo esc_url( home_url( '/privacy' ) ); ?>" style="color:var(--ink-mute);">Privacy</a> &middot;
+                <a href="<?php echo esc_url( home_url( '/terms' ) ); ?>" style="color:var(--ink-mute);">Terms</a> &middot;
                 <span style="color:var(--ink-mute);">All sales subject to age verification. 18+ only.</span>
             </div>
             <div style="display:flex;align-items:center;gap:16px;">
