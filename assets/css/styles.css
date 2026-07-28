@@ -1930,3 +1930,138 @@ ul.products.ftgs-home-products{
 .ftgs-cat-card:hover .ftgs-cat-cta{opacity:1;transform:translateY(0)}
 /* Remove the old count styling that's no longer used */
 .ftgs-cat-count{display:none}
+
+/* ==========================================================================
+   Feel The G's — Part F: cart page polish (dark luxury 2-col layout)
+   Modern Cart Starter owns the slide-out drawer; this styles the dedicated
+   /cart/ page (where some users land directly).
+   ========================================================================== */
+
+/* ---- Cart page: 2-column layout (items left, summary right) ---- */
+.woocommerce-cart .wrap{max-width:1400px}
+@media (min-width: 992px){
+  .woocommerce-cart form.woocommerce-cart-form{width:62%;float:left}
+  .woocommerce-cart .cart-collaterals{width:34%;float:right}
+  .woocommerce-cart .cart-collaterals .cart_totals{position:sticky;top:90px}
+}
+.woocommerce-cart::after{content:'';display:table;clear:both}
+
+/* ---- Cart form heading ---- */
+.woocommerce-cart-form .cart-items-head,
+.woocommerce-cart h1,
+.woocommerce-cart .entry-title{font-family:var(--display);color:var(--ink);font-weight:600}
+
+/* ---- Cart table (shop_table) — dark luxury ---- */
+.woocommerce table.shop_table{
+  border:none;
+  border-radius:var(--r-lg);
+  background:var(--bg-card);
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+}
+.woocommerce table.shop_table th{
+  background:var(--bg-2);
+  color:var(--ink-mute);
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+.woocommerce table.shop_table td{
+  border-top:1px solid var(--line);
+  padding:18px;
+  color:var(--ink-dim);
+  vertical-align:middle;
+}
+.woocommerce-cart table.cart img{
+  width:72px;height:72px;border-radius:var(--r-md);object-fit:cover;
+}
+.woocommerce-cart table.cart .product-name a{color:var(--ink);font-weight:600;text-decoration:none}
+.woocommerce-cart table.cart .product-name a:hover{color:var(--gold)}
+.woocommerce-cart table.cart .product-price,
+.woocommerce-cart table.cart .product-subtotal{color:var(--gold);font-weight:600}
+.woocommerce-cart table.cart .product-quantity .qty{
+  background:var(--bg);border:1px solid var(--line-2);color:var(--ink);
+  border-radius:var(--r-pill);padding:8px;width:60px;text-align:center;font-family:inherit;
+}
+.product-remove .remove{
+  background:transparent !important;color:var(--ink-mute) !important;width:auto !important;height:auto !important;
+  font-size:1.2rem;border-radius:0;
+}
+.product-remove .remove:hover{background:transparent !important;color:#ff5a5a !important}
+
+/* ---- Update cart + coupon buttons ---- */
+.woocommerce button.button:disabled,
+.woocommerce button.button:disabled[disabled]{padding:10px 22px;border-radius:var(--r-pill);background:var(--bg-2);color:var(--ink-dim);border:1px solid var(--line-2);font-weight:600;font-family:inherit}
+.woocommerce button.button:disabled:hover{background:var(--gold);color:#0a0a0a;border-color:var(--gold)}
+.woocommerce-cart .coupon .button{padding:10px 22px;border-radius:var(--r-pill);background:transparent;color:var(--gold);border:1px solid var(--gold);font-weight:600;font-family:inherit}
+.woocommerce-cart .coupon .button:hover{background:var(--gold);color:#0a0a0a}
+.woocommerce-cart .coupon input.input-text{background:var(--bg);border:1px solid var(--line-2);color:var(--ink);border-radius:var(--r-pill);padding:10px 16px;font-family:inherit;min-width:160px}
+
+/* ---- Cart totals / order summary (right column) ---- */
+.woocommerce .cart-collaterals .cart_totals h2{
+  font-family:var(--display);color:var(--ink);font-size:1.2rem;font-weight:600;
+  padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:18px;
+}
+.woocommerce .cart_totals table.shop_table{background:var(--bg-card)}
+.woocommerce .cart_totals .shop_table th{width:45%;background:transparent}
+.woocommerce .cart_totals .shop_table td{text-align:right;color:var(--ink)}
+.woocommerce .cart_totals .order-total td,
+.woocommerce .cart_totals .order-total th{border-top:2px solid var(--gold) !important;font-size:1.1rem}
+.woocommerce .cart_totals .order-total .amount{color:var(--gold);font-weight:700;font-size:1.2rem}
+.woocommerce-shipping-totals{color:var(--ink-dim)}
+
+/* ---- Proceed to Checkout button — refined gold, NOT oversized ---- */
+.woocommerce a.checkout-button,
+.woocommerce button.checkout-button,
+.woocommerce .checkout-button{
+  display:inline-block !important;
+  width:auto !important;
+  background:var(--gold) !important;
+  color:#0a0a0a !important;
+  border:none !important;
+  border-radius:var(--r-pill) !important;
+  padding:14px 36px !important;
+  font-size:.92rem !important;
+  font-weight:700 !important;
+  font-family:inherit !important;
+  letter-spacing:.02em !important;
+  margin-top:16px !important;
+  text-transform:none !important;
+  text-align:center;
+  box-shadow:0 4px 20px -6px rgba(254,219,98,.5);
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background-color .2s var(--ease);
+}
+.woocommerce a.checkout-button:hover,
+.woocommerce .checkout-button:hover{
+  background:#ffd97a !important;
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px -8px rgba(254,219,98,.6);
+}
+
+/* ---- Empty cart state ---- */
+.cart-empty{font-family:var(--display);font-size:1.6rem;color:var(--ink);text-align:center;margin:40px 0 8px}
+.return-to-shop .button{background:var(--gold) !important;color:#0a0a0a !important;border-radius:var(--r-pill);padding:14px 36px;font-weight:700;font-family:inherit;border:none}
+
+/* ---- Cross-sells below cart ---- */
+.woocommerce .cross-sells > h2{font-family:var(--display);font-size:1.2rem;color:var(--ink);font-weight:600;margin:32px 0 18px}
+
+/* Responsive */
+@media (max-width: 991px){
+  .woocommerce-cart form.woocommerce-cart-form,
+  .woocommerce-cart .cart-collaterals{width:100%;float:none}
+  .woocommerce .cart-collaterals .cart_totals{position:static}
+  .woocommerce-cart table.cart img{width:56px;height:56px}
+  .woocommerce-cart table.cart .product-name a{font-size:.9rem}
+}
+@media (max-width: 600px){
+  /* Stack cart table cells on mobile */
+  .woocommerce-cart table.cart tr td::before{
+    content:attr(data-title);
+    font-size:.7rem;text-transform:uppercase;color:var(--ink-mute);display:block;margin-bottom:4px;
+  }
+  .woocommerce-cart table.cart thead{display:none}
+}

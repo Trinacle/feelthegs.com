@@ -488,6 +488,25 @@ function ftgs_woo_wrapper_end() {
     echo '</div></main>';
 }
 
+/* ---------- Cart page optimizations ----------
+ * Modern Cart Starter handles the slide-out drawer; this tunes the dedicated
+ * /cart/ page (where some users land directly) into a clean 2-col layout.
+ */
+// Move cross-sells below the cart table (default is inside collaterals).
+remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
+add_action( 'woocommerce_after_cart_table', 'woocommerce_cross_sell_display', 10 );
+
+// Limit cross-sells to 4 in 4 columns.
+add_filter( 'woocommerce_cross_sells_total', function () { return 4; } );
+add_filter( 'woocommerce_cross_sells_columns', function () { return 4; } );
+
+// Disable the shipping calculator toggle on cart (Modern Cart handles shipping
+// estimate in its drawer flow).
+add_filter( 'woocommerce_enable_shipping_calc', '__return_false' );
+
+// Don't redirect to cart after add (let the Modern Cart drawer open instead).
+add_filter( 'woocommerce_cart_redirect_after_add', '__return_false' );
+
 /* ---------- Remove WooCommerce breadcrumbs (we have our own nav) ---------- */
 remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
 
