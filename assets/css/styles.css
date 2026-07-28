@@ -2127,3 +2127,51 @@ ul.products.ftgs-home-products{
   .ftgs-testimonials-grid{grid-template-columns:1fr;gap:18px}
   .ftgs-testimonials{margin-bottom:60px}
 }
+
+/* ==========================================================================
+   Feel The G's — Part H: About page (dark editorial luxury)
+   Auto-applies to /about-us/ via page-about-us.php template naming.
+   ========================================================================== */
+
+/* ---- Hero ---- */
+.ftgs-about-hero{position:relative;width:100%;height:min(60vh,520px);min-height:380px;background-size:cover;background-position:center;background-color:var(--bg-2);display:flex;align-items:center;justify-content:center;margin-top:0}
+.ftgs-about-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.6) 0%,rgba(0,0,0,.45) 50%,rgba(0,0,0,.75) 100%)}
+.ftgs-about-hero-inner{position:relative;z-index:2;text-align:center;padding:0 32px}
+.ftgs-about-hero .display{font-size:clamp(2.4rem,6vw,4rem);font-weight:700;letter-spacing:-.02em;margin:8px 0 0;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+
+/* ---- Stats band ---- */
+.ftgs-about-stats{padding:48px 0;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.ftgs-about-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.ftgs-about-stat{text-align:center}
+.ftgs-about-stat-num{display:block;font-family:var(--display);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:var(--gold);line-height:1;letter-spacing:-.02em}
+.ftgs-about-stat-label{display:block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);margin-top:8px}
+
+/* ---- Story body ---- */
+.ftgs-about-story{padding:80px 0}
+.ftgs-about-story .wrap{max-width:760px}
+.ftgs-about-story p{font-size:1.05rem;line-height:1.75;color:var(--ink-dim);margin:0 0 20px}
+.ftgs-about-story h2{font-family:var(--display);font-size:1.6rem;color:var(--ink);font-weight:600;margin:36px 0 16px}
+.ftgs-about-story h3{font-family:var(--display);font-size:1.25rem;color:var(--ink);font-weight:600;margin:28px 0 12px}
+.ftgs-about-story ul,.ftgs-about-story ol{margin:16px 0;padding-left:4px;list-style:none}
+.ftgs-about-story ul li{position:relative;padding:6px 0 6px 28px;line-height:1.65;color:var(--ink-dim)}
+.ftgs-about-story ul li::before{content:'';position:absolute;left:6px;top:14px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px rgba(254,219,98,.15)}
+.ftgs-about-story blockquote{border-left:3px solid var(--gold);padding:8px 0 8px 24px;margin:24px 0;font-style:italic;color:var(--ink);font-family:var(--display);font-size:1.15rem}
+
+/* ---- Values grid ---- */
+.ftgs-about-values{padding:40px 0 80px;background:var(--bg-2)}
+.ftgs-about-values-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.ftgs-about-value{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r-lg);padding:32px 26px;text-align:center;transition:border-color .25s var(--ease),transform .25s var(--ease)}
+.ftgs-about-value:hover{border-color:rgba(254,219,98,.3);transform:translateY(-3px)}
+.ftgs-about-value svg{width:36px;height:36px;color:var(--gold);margin-bottom:14px}
+.ftgs-about-value h3{font-family:var(--display);font-size:1.1rem;color:var(--ink);font-weight:600;margin:0 0 8px}
+.ftgs-about-value p{font-size:.92rem;line-height:1.55;color:var(--ink-dim);margin:0}
+
+/* Responsive */
+@media (max-width: 900px){
+  .ftgs-about-stats-grid,.ftgs-about-values-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width: 560px){
+  .ftgs-about-stats-grid,.ftgs-about-values-grid{grid-template-columns:1fr}
+  .ftgs-about-hero{height:60vh;min-height:320px}
+  .ftgs-about-story{padding:60px 0}
+}
