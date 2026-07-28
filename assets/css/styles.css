@@ -2175,3 +2175,142 @@ ul.products.ftgs-home-products{
   .ftgs-about-hero{height:60vh;min-height:320px}
   .ftgs-about-story{padding:60px 0}
 }
+
+/* ==========================================================================
+   Feel The G's — Part D2: NUCLEAR override of Astra/WC product card CSS
+   Astra enqueues AFTER the child theme, so its ul.products li.product a img
+   rules were winning the cascade and breaking our image layout (height:auto,
+   wrong margins, hover transforms). This block uses higher specificity + !important
+   on the few critical properties so our luxury card ALWAYS renders correctly.
+   Also widens the shop layout for a more fullscreen, editorial feel.
+   ========================================================================== */
+
+/* ---- 1. Make the shop layout feel fullscreen / editorial ---- */
+/* Wider container + tighter sidebar + more generous product area */
+.woocommerce.archive .wrap,
+.woocommerce-page.archive .wrap,
+body.tax-product_cat .wrap,
+body.post-type-archive-product .wrap{
+  max-width:1600px !important;
+  padding:0 40px !important;
+}
+@media (max-width: 1100px){
+  .woocommerce.archive .wrap,
+  body.tax-product_cat .wrap{padding:0 32px !important}
+}
+@media (max-width: 768px){
+  .woocommerce.archive .wrap,
+  body.tax-product_cat .wrap{padding:0 20px !important}
+}
+
+/* Shop layout: slimmer sidebar, bigger product grid area */
+.ftgs-shop-layout{grid-template-columns:240px 1fr !important;gap:56px !important;align-items:start}
+@media (max-width: 1100px){
+  .ftgs-shop-layout{grid-template-columns:200px 1fr !important;gap:32px !important}
+}
+
+/* ---- 2. KILL Astra's product card interference ---- */
+/* Astra adds ast-width-md-3 (width:25%) — neutralize (grid handles columns) */
+.woocommerce ul.products li.ftgs-product-card.ast-width-md-3,
+.woocommerce-page ul.products li.ftgs-product-card.ast-width-md-3,
+.woocommerce ul.products li.product.ast-width-md-3{
+  width:auto !important;
+  float:none !important;
+  max-width:none !important;
+}
+/* Astra's image rules — override with high specificity */
+.woocommerce ul.products li.ftgs-product-card a.ftgs-card-link img,
+.woocommerce-page ul.products li.ftgs-product-card a.ftgs-card-link img,
+.woocommerce ul.products li.product .ftgs-card-img img{
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  object-fit:cover !important;
+  margin:0 !important;
+  display:block !important;
+  box-shadow:none !important;
+}
+/* Kill Astra's hover transforms on our cards (we have our own) */
+.woocommerce ul.products li.ftgs-product-card.astra-woo-hover-zoom:hover img,
+.woocommerce ul.products li.ftgs-product-card.astra-woo-hover-zoom-fade:hover img,
+.woocommerce ul.products li.ftgs-product-card.astra-woo-hover-fade:hover img,
+.woocommerce ul.products li.ftgs-product-card.astra-woo-hover-swap:hover img{
+  transform:scale(1.06) !important;
+  opacity:1 !important;
+}
+/* Remove Astra's image padding/margin wrappers */
+.woocommerce ul.products li.ftgs-product-card.remove-featured-img-padding .ftgs-card-img,
+.woocommerce ul.products li.ftgs-product-card .ftgs-card-img{
+  padding:0 !important;
+  margin:0 !important;
+}
+
+/* ---- 3. Product card image container — bulletproof square ---- */
+.woocommerce .ftgs-product-card .ftgs-card-img{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  aspect-ratio:1/1 !important;
+  background:var(--bg-card) !important;
+  overflow:hidden !important;
+  border-radius:var(--r-md) !important;
+}
+.woocommerce .ftgs-product-card .ftgs-card-img img{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+}
+
+/* ---- 4. Card body — refined spacing ---- */
+.woocommerce .ftgs-product-card .ftgs-card-body{
+  padding:16px 2px 0 !important;
+}
+.woocommerce .ftgs-product-card .ftgs-card-title{
+  font-size:.9rem !important;
+  line-height:1.4 !important;
+  margin:0 0 8px !important;
+  color:var(--ink) !important;
+  font-weight:500 !important;
+  min-height:2.5em !important;
+}
+.woocommerce .ftgs-product-card .ftgs-card-price{
+  font-size:.95rem !important;
+  font-weight:600 !important;
+  color:var(--gold) !important;
+}
+.woocommerce .ftgs-product-card .ftgs-card-price ins{color:var(--gold) !important}
+
+/* ---- 5. Grid gap — more breathing room (luxury) ---- */
+.woocommerce ul.products,
+.woocommerce-page ul.products{
+  grid-template-columns:repeat(4,1fr) !important;
+  gap:48px 32px !important;
+}
+@media (max-width: 1200px){
+  .woocommerce ul.products,.woocommerce-page ul.products{gap:36px 24px !important}
+}
+@media (max-width: 1100px){
+  .woocommerce ul.products,.woocommerce-page ul.products{grid-template-columns:repeat(3,1fr) !important;gap:32px 20px !important}
+}
+@media (max-width: 820px){
+  .woocommerce ul.products,.woocommerce-page ul.products{grid-template-columns:repeat(2,1fr) !important;gap:24px 14px !important}
+}
+
+/* ---- 6. Shop header — bigger, more editorial ---- */
+.ftgs-shop-header{padding:24px 0 8px;text-align:left}
+.ftgs-shop-header .display{font-size:clamp(2rem,5vw,3.4rem) !important;letter-spacing:-.02em;margin:0 0 12px !important}
+.ftgs-shop-desc{margin:0 !important;max-width:680px !important;text-align:left;font-size:1.02rem;color:var(--ink-dim)}
+
+/* ---- 7. Toolbar — cleaner, gold accents ---- */
+.ftgs-shop-toolbar{
+  padding:20px 0 !important;
+  margin-bottom:32px !important;
+  border-bottom:1px solid var(--line) !important;
+  align-items:center;
+}
+.ftgs-result-count{color:var(--ink-mute);font-size:.82rem;letter-spacing:.02em}
+
+/* ---- 8. Section padding tighter at top ---- */
+.ftgs-shop-sec{padding:24px 0 80px !important}
