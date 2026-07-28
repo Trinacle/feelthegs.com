@@ -17,10 +17,56 @@ $ftgs_foot_cats = get_terms( array(
 if ( is_wp_error( $ftgs_foot_cats ) ) {
     $ftgs_foot_cats = array();
 }
+// Testimonials (ACF option — manage in admin → Theme Settings → Footer Testimonials).
+$ftgs_testimonials = function_exists( 'get_field' ) ? get_field( 'ftgs_testimonials', 'option' ) : null;
+if ( ! is_array( $ftgs_testimonials ) ) {
+    $ftgs_testimonials = array();
+}
 ?>
 
 <footer class="footer site-footer">
     <div class="footer-inner">
+
+        <?php if ( ! empty( $ftgs_testimonials ) ) : ?>
+        <!-- TESTIMONIALS STRIP -->
+        <section class="ftgs-testimonials reveal">
+            <div class="ftgs-testimonials-head">
+                <span class="ftgs-testimonials-eyebrow">What our customers say</span>
+            </div>
+            <div class="ftgs-testimonials-grid">
+                <?php foreach ( $ftgs_testimonials as $t ) :
+                    $quote   = isset( $t['quote'] ) ? $t['quote'] : '';
+                    $author  = isset( $t['author'] ) ? $t['author'] : '';
+                    $photo   = ! empty( $t['photo'] ) ? $t['photo'] : null;
+                    $photo_url = is_array( $photo ) ? ( isset( $photo['sizes']['thumbnail'] ) ? $photo['sizes']['thumbnail'] : ( $photo['url'] ?? '' ) ) : ( is_string( $photo ) ? $photo : '' );
+                    $rating  = isset( $t['rating'] ) ? intval( $t['rating'] ) : 5;
+                    $social  = isset( $t['social_url'] ) ? $t['social_url'] : '';
+                    ?>
+                    <figure class="ftgs-testimonial">
+                        <div class="ftgs-testimonial-stars" aria-label="<?php echo esc_attr( sprintf( '%d out of 5 stars', $rating ) ); ?>">
+                            <?php for ( $s = 0; $s < 5; $s++ ) : ?>
+                                <svg viewBox="0 0 24 24" fill="<?php echo $s < $rating ? 'var(--gold)' : 'none'; ?>" stroke="var(--gold)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <?php endfor; ?>
+                        </div>
+                        <blockquote class="ftgs-testimonial-quote">&ldquo;<?php echo esc_html( $quote ); ?>&rdquo;</blockquote>
+                        <figcaption class="ftgs-testimonial-author">
+                            <?php if ( $photo_url ) :
+                                $photo_html = '<img src="' . esc_url( $photo_url ) . '" alt="' . esc_attr( $author ) . '" loading="lazy">';
+                                echo $social ? '<a href="' . esc_url( $social ) . '" target="_blank" rel="noopener" class="ftgs-testimonial-photo">' . $photo_html . '</a>' : '<span class="ftgs-testimonial-photo">' . $photo_html . '</span>';
+                            endif; ?>
+                            <span class="ftgs-testimonial-name"><?php echo esc_html( $author ); ?></span>
+                            <?php if ( $social ) : ?>
+                                <a href="<?php echo esc_url( $social ); ?>" target="_blank" rel="noopener" class="ftgs-testimonial-social" aria-label="<?php echo esc_attr( $author ); ?> on social media">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+                                </a>
+                            <?php endif; ?>
+                        </figcaption>
+                    </figure>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
         <div class="foot-newsletter">
             <div>
                 <h3>Strap yourself in.</h3>

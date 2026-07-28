@@ -2065,3 +2065,65 @@ ul.products.ftgs-home-products{
   }
   .woocommerce-cart table.cart thead{display:none}
 }
+
+/* ==========================================================================
+   Feel The G's — Part G: footer testimonials (dark luxury cards)
+   ========================================================================== */
+
+.ftgs-testimonials{margin-bottom:80px;padding-bottom:8px}
+.ftgs-testimonials-head{text-align:center;margin-bottom:36px}
+.ftgs-testimonials-eyebrow{font-family:var(--display);font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.ftgs-testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+
+.ftgs-testimonial{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:28px 26px;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:relative;
+  transition:border-color .25s var(--ease),transform .25s var(--ease);
+}
+.ftgs-testimonial:hover{border-color:rgba(254,219,98,.3);transform:translateY(-3px)}
+.ftgs-testimonial::before{
+  content:'\201C';
+  position:absolute;
+  top:8px;right:20px;
+  font-family:Georgia,serif;
+  font-size:4rem;
+  line-height:1;
+  color:var(--gold);
+  opacity:.18;
+}
+.ftgs-testimonial-stars{display:flex;gap:3px}
+.ftgs-testimonial-stars svg{width:16px;height:16px}
+.ftgs-testimonial-quote{
+  font-family:var(--display);
+  font-size:1.02rem;
+  line-height:1.55;
+  color:var(--ink);
+  margin:0;
+  font-weight:400;
+  font-style:italic;
+}
+.ftgs-testimonial-author{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:6px}
+.ftgs-testimonial-photo{display:inline-block;text-decoration:none;flex-shrink:0}
+.ftgs-testimonial-photo img{
+  width:44px;height:44px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--gold);
+  transition:transform .2s var(--ease);
+}
+.ftgs-testimonial-photo:hover img{transform:scale(1.06)}
+.ftgs-testimonial-name{font-size:.9rem;font-weight:600;color:var(--ink);flex:1}
+.ftgs-testimonial-social{display:inline-flex;color:var(--ink-mute);transition:color .2s var(--ease);text-decoration:none}
+.ftgs-testimonial-social:hover{color:var(--gold)}
+.ftgs-testimonial-social svg{width:18px;height:18px}
+
+/* Responsive */
+@media (max-width: 900px){
+  .ftgs-testimonials-grid{grid-template-columns:1fr;gap:18px}
+  .ftgs-testimonials{margin-bottom:60px}
+}
