@@ -320,6 +320,9 @@ function ftgs_hide_no_image_products( $q ) {
     $q->set( 'meta_query', $meta_query );
 }
 
+/* ---------- Hide SKU on the front-end (kept in admin for inventory) ---------- */
+add_filter( 'wc_product_sku_enabled', '__return_false' );
+
 /* ---------- Newsletter signup endpoint ---------- */
 add_action( 'wp_ajax_ftgs_newsletter_submit', 'ftgs_newsletter_submit' );
 add_action( 'wp_ajax_nopriv_ftgs_newsletter_submit', 'ftgs_newsletter_submit' );

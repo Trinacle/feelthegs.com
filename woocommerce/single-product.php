@@ -101,11 +101,10 @@ while ( have_posts() ) :
                 <div class="tm-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Body-safe materials</span></div>
               </div>
 
-              <!-- Quick specs -->
+              <!-- Quick specs (SKU hidden per client request) -->
               <dl class="spec-dl">
                 <?php if ( $brand_name ) : ?><div><dt>Brand</dt><dd><?php echo esc_html( $brand_name ); ?></dd></div><?php endif; ?>
                 <?php if ( $cat_names ) : ?><div><dt>Category</dt><dd><?php echo esc_html( $cat_names ); ?></dd></div><?php endif; ?>
-                <?php if ( $sku ) : ?><div><dt>SKU</dt><dd><?php echo esc_html( $sku ); ?></dd></div><?php endif; ?>
                 <?php if ( $weight ) : ?><div><dt>Weight</dt><dd><?php echo esc_html( $weight . ' ' . get_option( 'woocommerce_weight_unit' ) ); ?></dd></div><?php endif; ?>
               </dl>
             </div>
@@ -138,7 +137,6 @@ while ( have_posts() ) :
                 <table class="spec-table">
                   <?php if ( $brand_name ) : ?><tr><td>Brand</td><td><?php echo esc_html( $brand_name ); ?></td></tr><?php endif; ?>
                   <?php if ( $cat_names ) : ?><tr><td>Category</td><td><?php echo esc_html( $cat_names ); ?></td></tr><?php endif; ?>
-                  <?php if ( $sku ) : ?><tr><td>SKU</td><td><?php echo esc_html( $sku ); ?></td></tr><?php endif; ?>
                   <?php if ( $weight ) : ?><tr><td>Weight</td><td><?php echo esc_html( $weight . ' ' . get_option( 'woocommerce_weight_unit' ) ); ?></td></tr><?php endif; ?>
                   <?php if ( ! empty( $dimensions ) ) : ?><tr><td>Dimensions</td><td><?php echo esc_html( implode( ' × ', $dimensions ) . ' ' . get_option( 'woocommerce_dimension_unit' ) ); ?></td></tr><?php endif; ?>
                 </table>
