@@ -78,8 +78,8 @@ html.light{
 html.light .grain{opacity:.25}
 html.light .ambient-blob{opacity:.18 !important}
 html.light body{background:var(--bg);color:var(--ink)}
-html.light header.site{background:rgba(247,248,246,.85)}
-html.light header.site.scrolled{background:#ffffff;border-bottom-color:rgba(0,0,0,.1)}
+html.light header.site{background:#000}
+html.light header.site.scrolled{background:#000;border-bottom-color:rgba(255,255,255,.1)}
 html.light .footer{background:#ffffff;color:#6e6e73}
 html.light .footer .foot-col a{color:#6e6e73}
 html.light .footer .foot-col a:hover{color:#8b2935}
@@ -156,8 +156,8 @@ p{color:var(--ink-dim)}
 .divider{height:1px;background:var(--line);width:100%}
 
 /* ---------- 7. Custom header (solid black on scroll for readability) ---------- */
-header.site{position:fixed;top:0;left:0;right:0;z-index:900;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,9,10,.72);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border-bottom:1px solid var(--line);transition:padding .4s var(--ease),background .4s var(--ease)}
-header.site.scrolled{padding:12px 32px;background:#08090a;border-bottom:1px solid var(--line-2)}
+header.site{position:fixed;top:0;left:0;right:0;z-index:900;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;background:#000;border-bottom:1px solid rgba(255,255,255,.06);transition:padding .4s var(--ease)}
+header.site.scrolled{padding:12px 32px;background:#000;border-bottom:1px solid rgba(255,255,255,.1)}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:-.02em}
 .logo-light{display:none}
 .brand-mark{width:30px;height:30px;border-radius:9px;background:var(--green-xl);display:grid;place-items:center;color:#0a0b0a;box-shadow:0 0 24px rgba(229,93,92,.5)}
@@ -1592,4 +1592,43 @@ html.light .sdn-news-msg.is-ok{color:var(--green-d)}
 @media (max-width: 480px) {
   .ftgs-cat-grid{grid-template-columns:1fr}
   .ftgs-value-grid{grid-template-columns:1fr}
+}
+
+/* ==========================================================================
+   Feel The G's — Part B: header icons + mega menu redesign (dark luxury)
+   Appended to the inherited design system.
+   ========================================================================== */
+
+/* ---- Header icon buttons (search + account) — unified styling ---- */
+.header-icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);padding:8px;border-radius:50%;background:transparent;border:none;cursor:pointer;transition:color .2s var(--ease),background .2s var(--ease);text-decoration:none}
+.header-icon-btn:hover{color:var(--gold);background:rgba(255,255,255,.06)}
+.header-icon-btn svg{width:21px;height:21px}
+
+/* ---- Mega menu: 2-column grid (link list + featured image) ---- */
+.ftgs-mega-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:stretch;padding:8px 0}
+
+/* Link list column */
+.ftgs-mega-list{display:flex;flex-direction:column;gap:2px}
+.ftgs-mega-head{font-family:var(--display);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);padding:6px 12px 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.ftgs-mega-link{display:block;padding:10px 12px;color:var(--ink-dim);font-size:.95rem;text-decoration:none;border-radius:var(--r-sm);transition:background .15s var(--ease),color .15s var(--ease),padding-left .15s var(--ease);border-left:2px solid transparent}
+.ftgs-mega-link:hover{background:var(--bg-card);color:var(--gold);padding-left:18px;border-left-color:var(--gold)}
+.ftgs-mega-link.ftgs-mega-all{margin-top:8px;color:var(--gold);font-weight:600}
+.ftgs-mega-link.ftgs-mega-all:hover{padding-left:18px}
+
+/* Featured image block (right column) */
+.ftgs-mega-feature{position:relative;display:flex;align-items:flex-end;min-height:280px;border-radius:var(--r-lg);overflow:hidden;background-size:cover;background-position:center;background-color:var(--bg-card);text-decoration:none;transition:transform .3s var(--ease)}
+.ftgs-mega-feature:hover{transform:scale(1.01)}
+.ftgs-mega-feature-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.05) 100%)}
+.ftgs-mega-feature-body{position:relative;z-index:2;padding:24px;display:flex;flex-direction:column;gap:6px}
+.ftgs-mega-feature-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.ftgs-mega-feature-title{font-family:var(--display);font-size:1.6rem;font-weight:700;color:#fff;line-height:1.1}
+.ftgs-mega-feature-cta{font-size:.88rem;color:var(--gold);font-weight:600;margin-top:6px}
+
+/* ---- Mega panel refinements (override the inherited SaaS-y look) ---- */
+.mega-panel .ftgs-mega-grid{padding:0}
+
+/* Responsive: stack mega menu on smaller screens */
+@media (max-width: 1024px) {
+  .ftgs-mega-grid{grid-template-columns:1fr;gap:24px}
+  .ftgs-mega-feature{min-height:200px}
 }

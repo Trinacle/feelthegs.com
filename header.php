@@ -2,8 +2,8 @@
 /**
  * The header for Feel The G's — a retail-shop header.
  *
- * Shop-centric nav: primary menu + a categories mega menu (built from the live
- * WC product categories), product search, cart icon, and the mobile drawer.
+ * Solid black bar. Shop-centric nav with one mega menu (Shop Categories) + a
+ * few category quick-links. Account + search + cart icons on the right.
  *
  * @package FeelTheGs
  */
@@ -30,7 +30,7 @@
 <div class="mega-backdrop"></div>
 
 <?php
-// Top-level product categories for the mega menu + mobile nav.
+// Top-level product categories for the mega menu + quick links + mobile nav.
 $ftgs_shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 $ftgs_top_cats = get_terms( array(
     'taxonomy'   => 'product_cat',
@@ -43,18 +43,11 @@ $ftgs_top_cats = get_terms( array(
 if ( is_wp_error( $ftgs_top_cats ) ) {
     $ftgs_top_cats = array();
 }
-
-// Featured / trending category block (high product count).
-$ftgs_trending = get_terms( array(
-    'taxonomy'   => 'product_cat',
-    'hide_empty' => true,
-    'number'     => 6,
-    'orderby'    => 'count',
-    'order'      => 'DESC',
-) );
-if ( is_wp_error( $ftgs_trending ) ) {
-    $ftgs_trending = array();
-}
+// Quick-link categories (top 3 by count — shown directly in the nav).
+$ftgs_quick = array_slice( $ftgs_top_cats, 0, 3 );
+// Featured category for the mega menu image block (highest-count top-level cat
+// that has a thumbnail or a first-product image).
+$ftgs_feat_cat = ! empty( $ftgs_top_cats ) ? $ftgs_top_cats[0] : null;
 ?>
 
 <header class="site">
@@ -66,14 +59,10 @@ if ( is_wp_error( $ftgs_trending ) ) {
         <div class="nav-item"><a class="nav-link" href="<?php echo esc_url( $ftgs_shop_url ); ?>">Shop</a></div>
 
         <div class="nav-item has-mega" data-menu="categories">
-            <a class="nav-link" href="<?php echo esc_url( $ftgs_shop_url ); ?>">Categories <?php echo ftgs_chevron(); // phpcs:ignore ?></a>
+            <a class="nav-link" href="<?php echo esc_url( $ftgs_shop_url ); ?>">Shop Categories <?php echo ftgs_chevron(); // phpcs:ignore ?></a>
         </div>
 
-        <?php
-        // Trending top-3 quick links (one each) for discoverability.
-        $ftgs_quick = array_slice( $ftgs_trending, 0, 3 );
-        foreach ( $ftgs_quick as $ftgs_qc ) :
-            ?>
+        <?php foreach ( $ftgs_quick as $ftgs_qc ) : ?>
             <div class="nav-item"><a class="nav-link" href="<?php echo esc_url( get_term_link( $ftgs_qc ) ); ?>"><?php echo esc_html( $ftgs_qc->name ); ?></a></div>
         <?php endforeach; ?>
 
@@ -81,9 +70,13 @@ if ( is_wp_error( $ftgs_trending ) ) {
     </nav>
 
     <div class="nav-cta">
-        <button class="header-search-btn" aria-label="Search products" id="header-search-trigger">
+        <button class="header-icon-btn" aria-label="Search products" id="header-search-trigger">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
+
+        <a href="<?php echo esc_url( home_url( '/my-account/' ) ); ?>" class="header-icon-btn" aria-label="My account">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
 
         <?php if ( function_exists( 'ftgs_cart_link' ) ) : ?>
             <?php ftgs_cart_link(); ?>
@@ -103,38 +96,44 @@ if ( is_wp_error( $ftgs_trending ) ) {
     </form>
 </div>
 
-<!-- CATEGORIES MEGA PANEL -->
+<!-- SHOP CATEGORIES MEGA PANEL -->
 <div class="mega">
     <div class="mega-inner">
         <div class="mega-panels">
             <div class="mega-panel" data-panel="categories">
-                <div class="mega-grid">
-                    <div class="mega-col-head">Shop by Category</div>
-                    <?php
-                    if ( ! empty( $ftgs_top_cats ) ) :
-                        foreach ( $ftgs_top_cats as $ftgs_cat ) :
-                            printf(
-                                '<a class="mega-link" href="%1$s"><strong>%2$s</strong><span>%3$s products</span></a>',
-                                esc_url( get_term_link( $ftgs_cat ) ),
-                                esc_html( $ftgs_cat->name ),
-                                (int) $ftgs_cat->count
-                            );
-                        endforeach;
-                    endif;
-                    ?>
-                    <a class="mega-link" href="<?php echo esc_url( $ftgs_shop_url ); ?>"><strong>All Products</strong><span>Browse the full catalog</span></a>
+                <div class="ftgs-mega-grid">
+                    <!-- Left: category link list (no counts) -->
+                    <div class="ftgs-mega-list">
+                        <div class="ftgs-mega-head">Shop by Category</div>
+                        <?php
+                        if ( ! empty( $ftgs_top_cats ) ) :
+                            foreach ( $ftgs_top_cats as $ftgs_cat ) :
+                                printf(
+                                    '<a class="ftgs-mega-link" href="%1$s">%2$s</a>',
+                                    esc_url( get_term_link( $ftgs_cat ) ),
+                                    esc_html( $ftgs_cat->name )
+                                );
+                            endforeach;
+                        endif;
+                        ?>
+                        <a class="ftgs-mega-link ftgs-mega-all" href="<?php echo esc_url( $ftgs_shop_url ); ?>">All Products</a>
+                    </div>
 
-                    <div class="mega-col-head">Trending</div>
-                    <?php
-                    foreach ( $ftgs_trending as $ftgs_tc ) :
-                        printf(
-                            '<a class="mega-link" href="%1$s"><strong>%2$s</strong><span>%3$s products</span></a>',
-                            esc_url( get_term_link( $ftgs_tc ) ),
-                            esc_html( $ftgs_tc->name ),
-                            (int) $ftgs_tc->count
-                        );
-                    endforeach;
-                    ?>
+                    <!-- Right: featured category image block -->
+                    <?php if ( $ftgs_feat_cat ) : ?>
+                        <?php
+                        $ftgs_feat_img = function_exists( 'ftgs_category_image' ) ? ftgs_category_image( $ftgs_feat_cat, 'ftgs-category-hero' ) : '';
+                        $ftgs_feat_img = $ftgs_feat_img ? $ftgs_feat_img : 'https://images.unsplash.com/photo-1618160452730-2c2c2c2c2c2c?w=600&q=80';
+                        ?>
+                        <a class="ftgs-mega-feature" href="<?php echo esc_url( get_term_link( $ftgs_feat_cat ) ); ?>"<?php echo $ftgs_feat_img ? ' style="background-image:url(' . esc_url( $ftgs_feat_img ) . ')"' : ''; ?>>
+                            <div class="ftgs-mega-feature-overlay"></div>
+                            <div class="ftgs-mega-feature-body">
+                                <span class="ftgs-mega-feature-eyebrow">Featured</span>
+                                <span class="ftgs-mega-feature-title"><?php echo esc_html( $ftgs_feat_cat->name ); ?></span>
+                                <span class="ftgs-mega-feature-cta">Shop now &rarr;</span>
+                            </div>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -149,6 +148,7 @@ if ( is_wp_error( $ftgs_trending ) ) {
         <?php foreach ( array_slice( $ftgs_top_cats, 0, 10 ) as $ftgs_mc ) : ?>
             <a href="<?php echo esc_url( get_term_link( $ftgs_mc ) ); ?>"><?php echo esc_html( $ftgs_mc->name ); ?></a>
         <?php endforeach; ?>
+        <a href="<?php echo esc_url( home_url( '/my-account/' ) ); ?>">My Account</a>
         <a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog' ) ); ?>">Blog</a>
     </nav>
 </div>

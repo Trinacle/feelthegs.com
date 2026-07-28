@@ -16,6 +16,60 @@ function ftgs_product_placeholder_url() {
     return get_stylesheet_directory_uri() . '/assets/img/no-product.svg';
 }
 
+/* ---------- Category image resolver ----------
+ * Resolves an image URL for a product_cat term, in priority order:
+ *   1. The category's own thumbnail (Products → Categories → thumbnail)
+ *   2. The first in-stock product's featured image in that category
+ *   3. '' (empty — caller handles the fallback)
+ *
+ * @param WP_Term $term  Product category term.
+ * @param string  $size  Image size (default 'woocommerce_thumbnail').
+ * @return string Image URL, or '' if none found.
+ */
+function ftgs_category_image( $term, $size = 'woocommerce_thumbnail' ) {
+    if ( ! $term || is_wp_error( $term ) ) {
+        return '';
+    }
+
+    // 1. Category thumbnail.
+    $thumb_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+    if ( $thumb_id ) {
+        $url = wp_get_attachment_image_url( $thumb_id, $size );
+        if ( $url ) {
+            return $url;
+        }
+    }
+
+    // 2. First in-stock product with an image in this category.
+    $products = get_posts( array(
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+        'tax_query'      => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $term->term_id,
+            ),
+        ),
+        'meta_query'     => array(
+            array( 'key' => '_thumbnail_id', 'compare' => 'EXISTS' ),
+            array( 'key' => '_stock_status', 'value' => 'outofstock', 'compare' => '!=' ),
+        ),
+    ) );
+
+    if ( ! empty( $products ) ) {
+        $url = get_the_post_thumbnail_url( $products[0], $size );
+        if ( $url ) {
+            return $url;
+        }
+    }
+
+    return '';
+}
+
 /* ==========================================================================
    Shop card renderer — used by woocommerce/archive-product.php
    Renders a single product card on the shop / category grid. WC's native loop
