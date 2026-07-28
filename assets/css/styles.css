@@ -36,6 +36,24 @@
   /* Type */
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --display: 'Inter Tight', 'Inter', sans-serif;
+  /* Brand nav font (BauOT, self-hosted on the live site) — falls back gracefully */
+  --nav-font: 'BauOT', 'Inter Tight', 'Inter', Helvetica, Arial, sans-serif;
+
+/* BauOT brand font (self-hosted on feelthegs.com) — used for nav + headings */
+@font-face{
+  font-family:'BauOT';
+  src:url('https://feelthegs.com/wp-content/uploads/2024/03/BauOT.otf') format('opentype');
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'BauOT';
+  src:url('https://feelthegs.com/wp-content/uploads/2024/03/BauOT-Bold.otf') format('opentype');
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
 
   /* Radius */
   --r-sm: 10px;
@@ -162,19 +180,22 @@ header.site.scrolled{padding:12px 32px;background:#000;border-bottom:1px solid r
 .logo-light{display:none}
 .brand-mark{width:30px;height:30px;border-radius:9px;background:var(--green-xl);display:grid;place-items:center;color:#0a0b0a;box-shadow:0 0 24px rgba(229,93,92,.5)}
 .brand-mark svg{width:18px;height:18px}
-.nav-row{display:flex;align-items:center;gap:2px}
+.nav-row{display:flex;align-items:center;gap:4px}
 .nav-item{position:relative}
 .nav-item.has-mega{padding:0;border-radius:var(--r-md);transition:background .25s var(--ease)}
 .nav-item.has-mega::after{content:"";position:absolute;left:0;right:0;top:100%;height:48px}
 .nav-item.has-mega:hover,.nav-item.has-mega.is-open{background:rgba(255,255,255,.05)}
-.nav-link{display:inline-flex;align-items:center;gap:6px;font-size:.88rem;font-weight:500;color:var(--ink-dim);padding:8px 13px;border-radius:var(--r-md);transition:color .25s var(--ease),background .25s var(--ease)}
+.nav-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--nav-font);font-size:1.05rem;font-weight:600;color:#fff;padding:10px 16px;border-radius:var(--r-md);transition:color .25s var(--ease),background .25s var(--ease);text-decoration:none;letter-spacing:.01em}
 .nav-item.has-mega .nav-link:hover{background:none}
-.nav-link:hover{color:var(--ink);background:rgba(255,255,255,.05)}
-.nav-link .chev{width:10px;height:10px;opacity:.5;transition:transform .3s var(--ease)}
-.nav-item.is-open .nav-link{color:var(--green-xl)}
+.nav-link:hover{color:var(--gold);background:rgba(255,255,255,.05)}
+.nav-link .chev{width:10px;height:10px;opacity:.6;transition:transform .3s var(--ease)}
+.nav-item.is-open .nav-link{color:var(--gold)}
 .nav-item.is-open .nav-link .chev{transform:rotate(180deg)}
 .nav-cta{display:flex;align-items:center;gap:10px}
 .menu-trigger{display:none}
+/* FiboSearch header search wrapper */
+.ftgs-header-search{min-width:220px}
+.ftgs-header-search .dgwt-wcas-search-wrapp{margin:0}
 
 /* ---------- 8. Standard mega menu (max-width 1300px, 3 columns, no blur) ---------- */
 .mega-backdrop{position:fixed;inset:0;z-index:940;pointer-events:none;background:transparent;transition:background .3s var(--ease)}
@@ -2314,3 +2335,72 @@ body.post-type-archive-product .wrap{
 
 /* ---- 8. Section padding tighter at top ---- */
 .ftgs-shop-sec{padding:24px 0 80px !important}
+
+/* ==========================================================================
+   Feel The G's — Footer enhancements: trust badges + testimonials + social + trustpilot
+   ========================================================================== */
+
+/* ---- Trust badges row ---- */
+.ftgs-trust-badges{padding:32px 0;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.ftgs-trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.ftgs-trust-badge{display:flex;align-items:center;gap:16px;background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 24px;text-decoration:none;color:var(--ink);transition:border-color .25s var(--ease),transform .25s var(--ease)}
+.ftgs-trust-badge:hover{border-color:rgba(254,219,98,.35);transform:translateY(-2px)}
+.ftgs-trust-badge svg{width:34px;height:34px;color:var(--gold);flex-shrink:0}
+.ftgs-trust-badge span{display:flex;flex-direction:column}
+.ftgs-trust-badge strong{font-size:.95rem;font-weight:600;color:var(--ink);line-height:1.3}
+.ftgs-trust-badge small{font-size:.78rem;color:var(--ink-mute);margin-top:2px}
+
+/* ---- Testimonials (photo-top layout, matches IG screenshot style) ---- */
+.ftgs-testimonials{padding:72px 0 56px}
+.ftgs-testimonials-head{text-align:center;margin-bottom:40px}
+.ftgs-testimonials-eyebrow{font-family:var(--display);font-size:1.4rem;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+.ftgs-testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.ftgs-testimonial{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  transition:border-color .25s var(--ease),transform .25s var(--ease);
+}
+.ftgs-testimonial:hover{border-color:rgba(254,219,98,.3);transform:translateY(-3px)}
+.ftgs-testimonial-photo{display:block;text-decoration:none;line-height:0;background:var(--bg-2);aspect-ratio:1/1;overflow:hidden}
+.ftgs-testimonial-photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.ftgs-testimonial-photo:hover img{transform:scale(1.04)}
+.ftgs-testimonial-content{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.ftgs-testimonial-stars{display:flex;gap:3px}
+.ftgs-testimonial-stars svg{width:15px;height:15px}
+.ftgs-testimonial-quote{
+  font-size:.92rem;line-height:1.55;color:var(--ink-dim);margin:0;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ftgs-testimonial-author{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:6px}
+.ftgs-testimonial-name{font-size:.88rem;font-weight:600;color:var(--gold)}
+.ftgs-testimonial-social{display:inline-flex;color:var(--ink-mute);transition:color .2s var(--ease);text-decoration:none}
+.ftgs-testimonial-social:hover{color:var(--gold)}
+.ftgs-testimonial-social svg{width:18px;height:18px}
+
+/* ---- Trustpilot row ---- */
+.ftgs-trustpilot-row{padding:8px 0 48px;border-bottom:1px solid var(--line)}
+.ftgs-trustpilot-row .wrap{max-width:520px}
+.trustpilot-widget{min-height:52px}
+
+/* ---- Footer social icons ---- */
+.foot-social{display:flex;gap:10px;margin-top:18px}
+.ftgs-social-icon{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--line);color:var(--ink-dim);text-decoration:none;transition:all .2s var(--ease)}
+.ftgs-social-icon svg{width:18px;height:18px}
+.ftgs-social-icon:hover{background:var(--gold);border-color:var(--gold);color:#0a0a0a;transform:translateY(-2px)}
+
+/* ---- Newsletter legal line ---- */
+.news-legal{font-size:.72rem;color:var(--ink-mute);line-height:1.5;margin-top:12px}
+.news-legal a{color:var(--ink-mute);text-decoration:underline}
+.news-legal a:hover{color:var(--gold)}
+
+/* Responsive */
+@media (max-width: 900px){
+  .ftgs-trust-grid{grid-template-columns:1fr;gap:14px}
+  .ftgs-testimonials-grid{grid-template-columns:1fr;gap:18px}
+  .ftgs-testimonials{padding:56px 0 40px}
+}

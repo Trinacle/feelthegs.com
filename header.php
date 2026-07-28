@@ -70,9 +70,21 @@ $ftgs_feat_cat = ! empty( $ftgs_top_cats ) ? $ftgs_top_cats[0] : null;
     </nav>
 
     <div class="nav-cta">
-        <button class="header-icon-btn" aria-label="Search products" id="header-search-trigger">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </button>
+        <?php
+        // FiboSearch AJAX product search (Solaris skin, purple submit). The plugin
+        // is installed + configured on this site; rendering its shortcode here keeps
+        // the instant-results UX you already have. Falls back to a search icon on
+        // mobile via FiboSearch's own responsive behavior.
+        if ( shortcode_exists( 'fibosearch' ) ) {
+            echo '<div class="ftgs-header-search">' . do_shortcode( '[fibosearch]' ) . '</div>';
+        } else {
+            ?>
+            <button class="header-icon-btn" aria-label="Search products" id="header-search-trigger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <?php
+        }
+        ?>
 
         <a href="<?php echo esc_url( home_url( '/my-account/' ) ); ?>" class="header-icon-btn" aria-label="My account">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -85,16 +97,6 @@ $ftgs_feat_cat = ! empty( $ftgs_top_cats ) ? $ftgs_top_cats[0] : null;
         <button class="menu-trigger" aria-label="Menu" aria-expanded="false"><span></span></button>
     </div>
 </header>
-
-<!-- HEADER SEARCH OVERLAY (product search) -->
-<div class="header-search-overlay" id="header-search-overlay" hidden>
-    <form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="header-search-form">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="search" name="s" placeholder="Search products…" autocomplete="off" autofocus>
-        <input type="hidden" name="post_type" value="product">
-        <button type="button" class="header-search-close" aria-label="Close search">&times;</button>
-    </form>
-</div>
 
 <!-- SHOP CATEGORIES MEGA PANEL -->
 <div class="mega">
