@@ -180,3 +180,188 @@ function ftgs_register_filter_config_fields() {
         'active'                => true,
     ) );
 }
+
+/* ---------- Homepage hero slider (ACF repeater on the Home page) ---------- */
+add_action( 'acf/init', 'ftgs_register_hero_slides_fields' );
+function ftgs_register_hero_slides_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    acf_add_local_field_group( array(
+        'key'      => 'group_ftgs_hero_slides',
+        'title'    => 'Homepage Hero Slider',
+        'fields'   => array(
+            array(
+                'key'           => 'field_ftgs_hero_slides',
+                'label'         => 'Hero slides',
+                'name'          => 'ftgs_hero_slides',
+                'type'          => 'repeater',
+                'instructions'  => 'Add one or more slides. The first becomes the opening slide. Recommended image size: 1920×800 (landscape). Each slide auto-rotates every 6 seconds.',
+                'layout'        => 'block',
+                'button_label'  => 'Add slide',
+                'min'           => 1,
+                'sub_fields'    => array(
+                    array(
+                        'key'   => 'field_ftgs_hero_image',
+                        'label' => 'Background image',
+                        'name'  => 'image',
+                        'type'  => 'image',
+                        'return_format' => 'array',
+                        'preview_size' => 'large',
+                        'required' => 1,
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_hero_heading',
+                        'label' => 'Headline',
+                        'name'  => 'heading',
+                        'type'  => 'text',
+                        'instructions' => 'Main headline text (e.g. "Strap Yourself In").',
+                        'default_value' => '',
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_hero_subheading',
+                        'label' => 'Subheadline',
+                        'name'  => 'subheading',
+                        'type'  => 'text',
+                        'instructions' => 'Optional supporting line below the headline.',
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_hero_cta_text',
+                        'label' => 'Button text',
+                        'name'  => 'cta_text',
+                        'type'  => 'text',
+                        'default_value' => 'Shop Now',
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_hero_cta_url',
+                        'label' => 'Button link',
+                        'name'  => 'cta_url',
+                        'type'  => 'url',
+                        'instructions' => 'Where the button links (e.g. /shop/).',
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_hero_text_color',
+                        'label' => 'Text color',
+                        'name'  => 'text_color',
+                        'type'  => 'select',
+                        'choices' => array(
+                            'light' => 'Light (white — for dark images)',
+                            'dark'  => 'Dark (black — for light images)',
+                        ),
+                        'default_value' => 'light',
+                    ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'page',
+                    'operator' => '==',
+                    'value'    => '3232', // Home page ID (page_on_front).
+                ),
+            ),
+        ),
+        'position'              => 'normal',
+        'style'                 => 'default',
+        'label_placement'       => 'top',
+        'instruction_placement' => 'field',
+        'active'                => true,
+    ) );
+}
+
+/* ---------- Testimonials (ACF repeater on a Theme Settings options page) ----------
+ * Stored as an ACF option so it's editable in one place (Customizer-style).
+ */
+add_action( 'acf/init', 'ftgs_register_testimonials_fields' );
+function ftgs_register_testimonials_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    // Register an options page for testimonials + global brand settings.
+    if ( function_exists( 'acf_add_options_page' ) ) {
+        acf_add_options_page( array(
+            'page_title' => "Feel The G's — Theme Settings",
+            'menu_title' => 'Theme Settings',
+            'menu_slug'  => 'ftgs-theme-settings',
+            'capability' => 'manage_options',
+            'redirect'   => false,
+        ) );
+    }
+
+    acf_add_local_field_group( array(
+        'key'      => 'group_ftgs_testimonials',
+        'title'    => 'Footer Testimonials',
+        'fields'   => array(
+            array(
+                'key'           => 'field_ftgs_testimonials',
+                'label'         => 'Testimonials',
+                'name'          => 'ftgs_testimonials',
+                'type'          => 'repeater',
+                'instructions'  => 'Shown in the footer. Add up to 6. Round author photo recommended 200×200.',
+                'layout'        => 'row',
+                'button_label'  => 'Add testimonial',
+                'max'           => 6,
+                'sub_fields'    => array(
+                    array(
+                        'key'   => 'field_ftgs_t_quote',
+                        'label' => 'Quote',
+                        'name'  => 'quote',
+                        'type'  => 'textarea',
+                        'rows'  => 3,
+                        'required' => 1,
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_t_author',
+                        'label' => 'Author name',
+                        'name'  => 'author',
+                        'type'  => 'text',
+                        'required' => 1,
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_t_photo',
+                        'label' => 'Author photo',
+                        'name'  => 'photo',
+                        'type'  => 'image',
+                        'return_format' => 'array',
+                        'preview_size' => 'thumbnail',
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_t_rating',
+                        'label' => 'Star rating',
+                        'name'  => 'rating',
+                        'type'  => 'number',
+                        'default_value' => 5,
+                        'min'   => 1,
+                        'max'   => 5,
+                        'step'  => 1,
+                    ),
+                    array(
+                        'key'   => 'field_ftgs_t_social',
+                        'label' => 'Social media link',
+                        'name'  => 'social_url',
+                        'type'  => 'url',
+                        'instructions' => 'Optional. Links the author photo to their profile.',
+                    ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'options_page',
+                    'operator' => '==',
+                    'value'    => 'ftgs-theme-settings',
+                ),
+            ),
+        ),
+        'position'              => 'normal',
+        'style'                 => 'default',
+        'label_placement'       => 'top',
+        'instruction_placement' => 'field',
+        'active'                => true,
+    ) );
+}
+

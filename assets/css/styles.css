@@ -1867,3 +1867,66 @@ ul.products.ftgs-home-products{
 
 /* ---- Product page: trust badges gold accent ---- */
 .trust-mini .tm-item svg{color:var(--gold)}
+
+/* ==========================================================================
+   Feel The G's — Part C: hero slider + discreet band + btn-gold + category cards
+   ========================================================================== */
+
+/* ---- .btn-gold: the primary CTA on the dark-luxury site ---- */
+.btn-gold{background:var(--gold);color:#0a0a0a;box-shadow:0 0 0 1px var(--gold),0 8px 24px -8px rgba(254,219,98,.5)}
+.btn-gold:hover{background:#ffd97a;color:#0a0a0a;transform:translateY(-2px);box-shadow:0 0 0 1px #ffd97a,0 12px 32px -8px rgba(254,219,98,.6)}
+
+/* ---- Hero slider ---- */
+.ftgs-hero-slider{position:relative;width:100%;height:min(70vh,640px);min-height:420px;overflow:hidden;background:#000;margin-top:0}
+.ftgs-hero-track{position:absolute;inset:0}
+.ftgs-hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1s var(--ease);display:flex;align-items:center;justify-content:center}
+.ftgs-hero-slide.is-active{opacity:1;z-index:1}
+.ftgs-hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.78) 0%,rgba(0,0,0,.4) 50%,rgba(0,0,0,.2) 100%)}
+.ftgs-hero-overlay-light{background:linear-gradient(to right,rgba(255,255,255,.78) 0%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.2) 100%)}
+.ftgs-hero-inner{position:relative;z-index:2;text-align:center;padding:0 32px;max-width:760px}
+.ftgs-hero-heading{font-family:var(--display);font-size:clamp(2.2rem,6vw,4.5rem);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin:0 0 16px;text-shadow:0 2px 20px rgba(0,0,0,.3)}
+.ftgs-hero-subheading{font-size:clamp(1rem,2vw,1.3rem);line-height:1.5;margin:0 0 28px;max-width:600px;margin-left:auto;margin-right:auto;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+/* Text color variants */
+.ftgs-hero-text-light .ftgs-hero-heading,.ftgs-hero-text-light .ftgs-hero-subheading{color:#fff}
+.ftgs-hero-text-dark .ftgs-hero-heading,.ftgs-hero-text-dark .ftgs-hero-subheading{color:#0a0a0a}
+
+/* Arrows */
+.ftgs-hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease);backdrop-filter:blur(8px)}
+.ftgs-hero-arrow:hover{background:var(--gold);border-color:var(--gold);color:#0a0a0a}
+.ftgs-hero-arrow svg{width:22px;height:22px}
+.ftgs-hero-prev{left:24px}
+.ftgs-hero-next{right:24px}
+
+/* Dots */
+.ftgs-hero-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:10px}
+.ftgs-hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4);border:none;cursor:pointer;padding:0;transition:background .2s var(--ease),width .2s var(--ease)}
+.ftgs-hero-dot.is-active{background:var(--gold);width:28px;border-radius:5px}
+
+/* Responsive slider */
+@media (max-width: 768px){
+  .ftgs-hero-slider{height:min(60vh,480px);min-height:360px}
+  .ftgs-hero-arrow{width:38px;height:38px}
+  .ftgs-hero-arrow svg{width:18px;height:18px}
+  .ftgs-hero-prev{left:12px}
+  .ftgs-hero-next{right:12px}
+  .ftgs-hero-overlay{background:linear-gradient(to bottom,rgba(0,0,0,.4) 0%,rgba(0,0,0,.85) 100%)}
+  .ftgs-hero-inner{padding:0 24px}
+}
+
+/* ---- Discreet shipping band (replaces the 4-item SaaS value props) ---- */
+.ftgs-discreet-band{padding:22px 0;background:var(--bg-2);border-bottom:1px solid var(--line)}
+.ftgs-discreet-band .wrap{display:flex;align-items:center;justify-content:center;gap:12px}
+.ftgs-discreet-band svg{width:22px;height:22px;color:var(--gold);flex-shrink:0}
+.ftgs-discreet-band span{font-size:.92rem;font-weight:600;letter-spacing:.04em;color:var(--ink-dim);text-transform:uppercase}
+
+/* ---- Category cards (no counts, cleaner) ---- */
+.ftgs-cat-card{position:relative;aspect-ratio:1/1;border-radius:var(--r-lg);overflow:hidden;background-size:cover;background-position:center;background-color:var(--bg-card);border:1px solid var(--line);text-decoration:none;color:#fff;transition:transform .3s var(--ease),border-color .3s var(--ease)}
+.ftgs-cat-card:hover{transform:translateY(-3px);border-color:var(--gold)}
+.ftgs-cat-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.05) 100%);transition:background .3s var(--ease)}
+.ftgs-cat-card:hover .ftgs-cat-overlay{background:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(254,219,98,.18) 100%)}
+.ftgs-cat-body{position:absolute;left:0;right:0;bottom:0;padding:20px}
+.ftgs-cat-body h3{font-family:var(--display);font-size:1.15rem;font-weight:700;margin:0 0 6px}
+.ftgs-cat-cta{font-size:.78rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;opacity:0;transform:translateY(4px);transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.ftgs-cat-card:hover .ftgs-cat-cta{opacity:1;transform:translateY(0)}
+/* Remove the old count styling that's no longer used */
+.ftgs-cat-count{display:none}

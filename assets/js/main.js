@@ -403,6 +403,74 @@
   }
 
   /* ============================================================
+     Homepage hero slider — auto-rotate, dots, arrows, swipe, pause on hover.
+     Markup is server-rendered by front-page.php from the ACF repeater. The
+     slider only initializes when [data-ftgs-slider] is present + >1 slide.
+     ============================================================ */
+  (function () {
+    var root = document.querySelector('[data-ftgs-slider]');
+    if (!root) return;
+    var slides = root.querySelectorAll('.ftgs-hero-slide');
+    if (slides.length < 2) return;
+
+    var track = root.querySelector('.ftgs-hero-track');
+    var prevBtn = root.querySelector('[data-ftgs-slider-prev]');
+    var nextBtn = root.querySelector('[data-ftgs-slider-next]');
+    var dots = root.querySelectorAll('[data-ftgs-slider-dot]');
+    var current = 0;
+    var timer = null;
+    var DURATION = 6000; // 6s per slide
+
+    function show(idx) {
+      if (idx < 0) idx = slides.length - 1;
+      if (idx >= slides.length) idx = 0;
+      current = idx;
+      slides.forEach(function (s, i) { s.classList.toggle('is-active', i === idx); });
+      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === idx); });
+    }
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+    function start() { stop(); timer = setInterval(next, DURATION); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+    if (nextBtn) nextBtn.addEventListener('click', function () { next(); start(); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { prev(); start(); });
+    dots.forEach(function (d) {
+      d.addEventListener('click', function () {
+        show(parseInt(d.getAttribute('data-ftgs-slider-dot'), 10) || 0);
+        start();
+      });
+    });
+
+    // Pause on hover/focus, resume on leave.
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+
+    // Swipe support (touch).
+    var touchX = null;
+    root.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+    root.addEventListener('touchend', function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); start(); }
+      touchX = null;
+    }, { passive: true });
+
+    // Respect reduced-motion preference.
+    var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) start();
+
+    // Keyboard nav when slider is focused.
+    root.setAttribute('tabindex', '0');
+    root.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { prev(); start(); }
+      if (e.key === 'ArrowRight') { next(); start(); }
+    });
+  })();
+
+  /* ============================================================
      Newsletter signup (AJAX). Handles every form with class
      .ftgs-news on the page (footer + homepage hero, etc.).
      Nonce is embedded in the form via wp_nonce_field() — no

@@ -46,7 +46,63 @@ $ftgs_sale_ids = array_slice( $ftgs_sale_ids, 0, 4 );
 
 <main>
 
-  <!-- HERO -->
+  <?php
+  // HERO SLIDER — pulls slides from the ACF ftgs_hero_slides repeater on the
+  // Home page. Falls back to a dark text hero when no slides are configured.
+  $ftgs_hero_slides = function_exists( 'get_field' ) ? get_field( 'ftgs_hero_slides' ) : null;
+  $ftgs_has_slides  = is_array( $ftgs_hero_slides ) && ! empty( $ftgs_hero_slides );
+  ?>
+
+  <?php if ( $ftgs_has_slides ) : ?>
+  <!-- HERO SLIDER -->
+  <section class="ftgs-hero-slider" data-ftgs-slider>
+    <div class="ftgs-hero-track">
+      <?php foreach ( $ftgs_hero_slides as $i => $slide ) :
+          $img_arr = ! empty( $slide['image'] ) ? $slide['image'] : null;
+          $img_url = is_array( $img_arr ) ? ( isset( $img_arr['sizes']['large'] ) ? $img_arr['sizes']['large'] : $img_arr['url'] ) : ( is_string( $img_arr ) ? $img_arr : '' );
+          if ( ! $img_url ) { continue; }
+          $heading     = isset( $slide['heading'] ) ? $slide['heading'] : '';
+          $subheading  = isset( $slide['subheading'] ) ? $slide['subheading'] : '';
+          $cta_text    = ! empty( $slide['cta_text'] ) ? $slide['cta_text'] : 'Shop Now';
+          $cta_url     = ! empty( $slide['cta_url'] ) ? $slide['cta_url'] : $ftgs_shop_url;
+          $text_color  = isset( $slide['text_color'] ) ? $slide['text_color'] : 'light';
+          $is_dark_text = ( 'dark' === $text_color );
+          ?>
+        <div class="ftgs-hero-slide<?php echo 0 === $i ? ' is-active' : ''; ?> ftgs-hero-text-<?php echo esc_attr( $text_color ); ?>" style="background-image:url('<?php echo esc_url( $img_url ); ?>');">
+          <div class="ftgs-hero-overlay<?php echo $is_dark_text ? ' ftgs-hero-overlay-light' : ''; ?>"></div>
+          <div class="ftgs-hero-inner wrap center">
+            <?php if ( $heading ) : ?>
+              <h1 class="ftgs-hero-heading reveal reveal-d1"><?php echo wp_kses_post( $heading ); ?></h1>
+            <?php endif; ?>
+            <?php if ( $subheading ) : ?>
+              <p class="ftgs-hero-subheading reveal reveal-d2"><?php echo esc_html( $subheading ); ?></p>
+            <?php endif; ?>
+            <?php if ( $cta_text ) : ?>
+              <a href="<?php echo esc_url( $cta_url ); ?>" class="btn btn-gold btn-lg reveal reveal-d3"><?php echo esc_html( $cta_text ); ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+            <?php endif; ?>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+
+    <?php if ( count( $ftgs_hero_slides ) > 1 ) : ?>
+      <!-- Navigation -->
+      <button class="ftgs-hero-arrow ftgs-hero-prev" aria-label="Previous slide" data-ftgs-slider-prev>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="ftgs-hero-arrow ftgs-hero-next" aria-label="Next slide" data-ftgs-slider-next>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="ftgs-hero-dots" data-ftgs-slider-dots>
+        <?php foreach ( $ftgs_hero_slides as $i => $slide ) : ?>
+          <button class="ftgs-hero-dot<?php echo 0 === $i ? ' is-active' : ''; ?>" data-ftgs-slider-dot="<?php echo (int) $i; ?>" aria-label="Go to slide <?php echo (int) ( $i + 1 ); ?>"></button>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </section>
+
+  <?php else : ?>
+  <!-- HERO (text fallback — add slides in Home → Hero Slider to enable the slider) -->
   <section class="page-hero">
     <div class="ph-smoke"><div class="ph-blob b1"></div><div class="ph-blob b2"></div><div class="ph-blob b3"></div></div>
     <div class="ph-inner center">
@@ -58,40 +114,22 @@ $ftgs_sale_ids = array_slice( $ftgs_sale_ids, 0, 4 );
         Premium sex toys, lingerie, and bondage gear — curated for pleasure. Discreet shipping on every order, every time.
       </p>
       <div class="hero-actions reveal reveal-d3" style="justify-content:center;margin-top:32px;">
-        <a href="<?php echo esc_url( $ftgs_shop_url ); ?>" class="btn btn-lime btn-lg">Shop Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        <?php if ( ! empty( $ftgs_home_cats ) ) : ?>
-          <a href="<?php echo esc_url( get_term_link( $ftgs_home_cats[0] ) ); ?>" class="btn btn-outline btn-lg">Browse <?php echo esc_html( $ftgs_home_cats[0]->name ); ?></a>
-        <?php endif; ?>
+        <a href="<?php echo esc_url( $ftgs_shop_url ); ?>" class="btn btn-gold btn-lg">Shop Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
     </div>
   </section>
+  <?php endif; ?>
 
-  <!-- VALUE PROPS -->
-  <section class="sec ftgs-value-sec">
-    <div class="wrap">
-      <div class="ftgs-value-grid reveal">
-        <div class="ftgs-value">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-          <div><strong>Discreet Shipping</strong><span>Plain packaging, every order</span></div>
-        </div>
-        <div class="ftgs-value">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <div><strong>Secure Checkout</strong><span>Encrypted &amp; private</span></div>
-        </div>
-        <div class="ftgs-value">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
-          <div><strong>Verified Quality</strong><span>Body-safe materials</span></div>
-        </div>
-        <div class="ftgs-value">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <div><strong>Real Support</strong><span>Here when you need us</span></div>
-        </div>
-      </div>
+  <!-- DISCREET SHIPPING BAND (replaces the 4-item SaaS value props) -->
+  <section class="ftgs-discreet-band reveal">
+    <div class="wrap center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span>Discreet packaging. Every order.</span>
     </div>
   </section>
 
   <?php if ( ! empty( $ftgs_home_cats ) ) : ?>
-  <!-- SHOP BY CATEGORY -->
+  <!-- SHOP BY CATEGORY (auto thumbnails via ftgs_category_image; no counts) -->
   <section class="sec">
     <div class="wrap">
       <div class="sec-head reveal">
@@ -100,14 +138,13 @@ $ftgs_sale_ids = array_slice( $ftgs_sale_ids, 0, 4 );
       </div>
       <div class="ftgs-cat-grid">
         <?php foreach ( $ftgs_home_cats as $ftgs_cat ) :
-            $ftgs_thumb_id = get_term_meta( $ftgs_cat->term_id, 'thumbnail_id', true );
-            $ftgs_img = $ftgs_thumb_id ? wp_get_attachment_image_url( $ftgs_thumb_id, 'ftgs-category-hero' ) : '';
+            $ftgs_img = function_exists( 'ftgs_category_image' ) ? ftgs_category_image( $ftgs_cat, 'woocommerce_thumbnail' ) : '';
             ?>
           <a href="<?php echo esc_url( get_term_link( $ftgs_cat ) ); ?>" class="ftgs-cat-card reveal"<?php echo $ftgs_img ? ' style="background-image:url(' . esc_url( $ftgs_img ) . ')"' : ''; ?>>
             <div class="ftgs-cat-overlay"></div>
             <div class="ftgs-cat-body">
               <h3><?php echo esc_html( $ftgs_cat->name ); ?></h3>
-              <span class="ftgs-cat-count"><?php echo (int) $ftgs_cat->count; ?> products</span>
+              <span class="ftgs-cat-cta">Shop now &rarr;</span>
             </div>
           </a>
         <?php endforeach; ?>
