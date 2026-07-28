@@ -1462,21 +1462,24 @@ html.light .sdn-news-msg.is-ok{color:var(--green-d)}
 .ftgs-filter-clear{width:100%;background:transparent;border:1px solid var(--line-2);color:var(--ink-dim);padding:10px;border-radius:var(--r-md);font-size:.85rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s var(--ease)}
 .ftgs-filter-clear:hover{border-color:var(--green-xl);color:var(--green-xl)}
 
-/* ---- Product card ---- */
-.ftgs-product-card{list-style:none;background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
-.ftgs-product-card:hover{transform:translateY(-4px);border-color:var(--green-l);box-shadow:var(--sh-card)}
-.ftgs-card-img{position:relative;aspect-ratio:1/1;background:var(--bg-2);overflow:hidden}
-.ftgs-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
-.ftgs-product-card:hover .ftgs-card-img img{transform:scale(1.04)}
-.ftgs-badge{position:absolute;top:10px;left:10px;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:var(--r-pill);text-transform:uppercase;letter-spacing:.05em}
-.ftgs-badge-sale{background:var(--green-xl);color:#fff}
-.ftgs-badge-out{background:rgba(0,0,0,.7);color:#fff}
-.ftgs-card-body{padding:14px 16px 18px}
-.ftgs-card-brand{display:block;font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:4px}
-.ftgs-card-title{font-size:.95rem;font-weight:600;line-height:1.35;color:var(--ink);margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
-.ftgs-card-price{font-size:1rem;font-weight:700;color:var(--green-xl)}
-.ftgs-card-price del{color:var(--ink-mute);font-weight:400;text-decoration:line-through;margin-right:6px}
-.ftgs-card-price ins{background:none;text-decoration:none}
+/* ---- Product card (minimal luxury — image-forward, no heavy border) ---- */
+.ftgs-product-card{list-style:none;background:transparent;border:none;border-radius:0;overflow:visible;transition:none;padding:0;margin:0}
+.ftgs-product-card:hover{transform:none}
+.ftgs-card-link{display:block;text-decoration:none;color:inherit}
+.ftgs-card-img{position:relative;aspect-ratio:1/1;background:var(--bg-card);overflow:hidden;border-radius:var(--r-md);box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.ftgs-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.ftgs-product-card:hover .ftgs-card-img img{transform:scale(1.06)}
+.ftgs-product-card:hover .ftgs-card-img{box-shadow:0 8px 30px -8px rgba(0,0,0,.6)}
+.ftgs-badge{position:absolute;top:12px;left:12px;z-index:2;font-size:.66rem;font-weight:700;padding:4px 10px;border-radius:var(--r-pill);text-transform:uppercase;letter-spacing:.08em}
+.ftgs-badge-sale{background:var(--gold);color:#0a0a0a}
+.ftgs-badge-out{background:rgba(0,0,0,.75);color:#fff;backdrop-filter:blur(4px)}
+.ftgs-card-body{padding:14px 4px 4px;background:transparent;border:none}
+.ftgs-card-brand{display:block;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;opacity:.85}
+.ftgs-card-title{font-size:.92rem;font-weight:500;line-height:1.35;color:var(--ink);margin:0 0 6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em;transition:color .2s var(--ease)}
+.ftgs-product-card:hover .ftgs-card-title{color:var(--gold)}
+.ftgs-card-price{font-size:.98rem;font-weight:600;color:var(--ink)}
+.ftgs-card-price del{color:var(--ink-mute);font-weight:400;text-decoration:line-through;margin-right:6px;font-size:.85rem}
+.ftgs-card-price ins{background:none;text-decoration:none;color:var(--gold)}
 
 /* ---- Empty state ---- */
 .ftgs-shop-empty{text-align:center;padding:60px 20px}
@@ -1631,4 +1634,97 @@ html.light .sdn-news-msg.is-ok{color:var(--green-d)}
 @media (max-width: 1024px) {
   .ftgs-mega-grid{grid-template-columns:1fr;gap:24px}
   .ftgs-mega-feature{min-height:200px}
+}
+
+/* ==========================================================================
+   Feel The G's — Part D: collection page grid + layout refinements
+   Force the 4-column luxury grid on WC archive pages (which use the native
+   <ul class="products"> wrapper, not .ftgs-home-products).
+   ========================================================================== */
+
+/* WC archive product grid: 4 cols desktop, 3 on laptop, 2 on tablet, 2 on mobile */
+.woocommerce ul.products,
+.woocommerce-page ul.products,
+ul.products.ftgs-home-products{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:32px 24px;
+}
+/* Override WC's inline width:100% / float styles on the <li> */
+.woocommerce ul.products li.product,
+.woocommerce-page ul.products li.product,
+.woocommerce ul.products li.ftgs-product-card{
+  width:auto !important;
+  float:none;
+  margin:0;
+  padding:0;
+  background:transparent;
+  border:none;
+  border-radius:0;
+  box-shadow:none;
+}
+/* WC adds its own .product hover/border — neutralize so our card styles win */
+.woocommerce ul.products li.product:hover{
+  box-shadow:none;
+  transform:none;
+}
+
+/* Shop layout: widen + balanced sidebar */
+.ftgs-shop-layout{grid-template-columns:260px 1fr;gap:48px}
+.ftgs-shop-sec{padding:32px 0 80px}
+
+/* Shop toolbar: cleaner, gold sort */
+.ftgs-shop-toolbar{padding-bottom:24px;margin-bottom:32px}
+.woocommerce-ordering select,
+.ftgs-shop-toolbar .orderby{
+  background:var(--bg-card);
+  border:1px solid var(--line-2);
+  color:var(--ink);
+  border-radius:var(--r-pill);
+  padding:8px 36px 8px 16px;
+  font-size:.85rem;
+  font-family:inherit;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23fedb62' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+}
+.woocommerce-ordering{margin:0}
+
+/* Shop header (title + description) */
+.ftgs-shop-header{margin-bottom:40px}
+.ftgs-shop-header .display{font-size:clamp(1.8rem,4vw,2.8rem);margin:0 0 10px;letter-spacing:-.02em}
+.ftgs-shop-desc{color:var(--ink-dim);font-size:1rem;max-width:720px;margin:8px auto 0}
+
+/* Pagination: gold current */
+.ftgs-shop-pagination a:hover{border-color:var(--gold);color:var(--gold)}
+.ftgs-shop-pagination .current{background:var(--gold);border-color:var(--gold);color:#0a0a0a}
+
+/* Result count: subtle */
+.ftgs-result-count{color:var(--ink-mute);font-size:.82rem}
+
+/* Responsive shop grid */
+@media (max-width: 1100px){
+  .woocommerce ul.products,
+  .woocommerce-page ul.products,
+  ul.products.ftgs-home-products{grid-template-columns:repeat(3,1fr);gap:24px 18px}
+}
+@media (max-width: 820px){
+  .ftgs-shop-layout{grid-template-columns:1fr;gap:0}
+  .woocommerce ul.products,
+  .woocommerce-page ul.products,
+  ul.products.ftgs-home-products{grid-template-columns:repeat(2,1fr);gap:20px 14px}
+  .ftgs-shop-sidebar{position:fixed} /* drawer takes over */
+}
+@media (max-width: 480px){
+  .woocommerce ul.products,
+  .woocommerce-page ul.products,
+  ul.products.ftgs-home-products{grid-template-columns:repeat(2,1fr);gap:16px 10px}
+  .ftgs-card-body{padding:10px 2px 2px}
+  .ftgs-card-title{font-size:.82rem}
 }
