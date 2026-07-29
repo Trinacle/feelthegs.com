@@ -18,7 +18,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'FTGS_VERSION', '1.3.0' );
+define( 'FTGS_VERSION', '1.3.1' );
 define( 'FTGS_DIR', get_stylesheet_directory() );
 define( 'FTGS_URI', get_stylesheet_directory_uri() );
 

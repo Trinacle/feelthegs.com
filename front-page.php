@@ -128,6 +128,13 @@ $ftgs_sale_ids = array_slice( $ftgs_sale_ids, 0, 4 );
     </div>
   </section>
 
+  <!-- SEO INTRO BLOCK (white full-width, under hero — matches live site) -->
+  <section class="ftgs-seo-intro reveal">
+    <div class="wrap-tight wrap center">
+      <p>Your premium destination for high-quality <a href="<?php echo esc_url( home_url( '/collections/adult-toys/' ) ); ?>">adult sex toys</a>, seductive <a href="<?php echo esc_url( home_url( '/collections/lingerie/' ) ); ?>">lingerie</a>, and <a href="<?php echo esc_url( home_url( '/collections/bondage/' ) ); ?>">bondage</a> gear. Shipping discreetly to USA &amp; Canada.</p>
+    </div>
+  </section>
+
   <?php if ( ! empty( $ftgs_home_cats ) ) : ?>
   <!-- SHOP BY CATEGORY (auto thumbnails via ftgs_category_image; no counts) -->
   <section class="sec">

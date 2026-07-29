@@ -2133,8 +2133,8 @@ ul.products.ftgs-home-products{
 .ftgs-testimonial-author{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:6px}
 .ftgs-testimonial-photo{display:inline-block;text-decoration:none;flex-shrink:0}
 .ftgs-testimonial-photo img{
-  width:44px;height:44px;border-radius:50%;object-fit:cover;
-  border:2px solid var(--gold);
+  width:100%;height:100%;object-fit:cover;
+  border-radius:0;
   transition:transform .2s var(--ease);
 }
 .ftgs-testimonial-photo:hover img{transform:scale(1.06)}
@@ -2366,8 +2366,8 @@ body.post-type-archive-product .wrap{
   transition:border-color .25s var(--ease),transform .25s var(--ease);
 }
 .ftgs-testimonial:hover{border-color:rgba(254,219,98,.3);transform:translateY(-3px)}
-.ftgs-testimonial-photo{display:block;text-decoration:none;line-height:0;background:var(--bg-2);aspect-ratio:1/1;overflow:hidden}
-.ftgs-testimonial-photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.ftgs-testimonial-photo{display:block;text-decoration:none;line-height:0;background:var(--bg-2);aspect-ratio:1/1;overflow:hidden;border-radius:0}
+.ftgs-testimonial-photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);border-radius:0 !important}
 .ftgs-testimonial-photo:hover img{transform:scale(1.04)}
 .ftgs-testimonial-content{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
 .ftgs-testimonial-stars{display:flex;gap:3px}
@@ -2404,3 +2404,15 @@ body.post-type-archive-product .wrap{
   .ftgs-testimonials-grid{grid-template-columns:1fr;gap:18px}
   .ftgs-testimonials{padding:56px 0 40px}
 }
+
+/* ==========================================================================
+   Feel The G's — SEO intro block (white full-width, under hero)
+   Matches the live site's intro paragraph styling.
+   ========================================================================== */
+.ftgs-seo-intro{padding:48px 0;background:#fff}
+html.light .ftgs-seo-intro{background:#fff}
+.ftgs-seo-intro .wrap{max-width:860px}
+.ftgs-seo-intro p{font-family:var(--display);font-size:clamp(1.1rem,2.2vw,1.5rem);line-height:1.55;color:#141004;margin:0;text-align:center;letter-spacing:-.005em;font-weight:500}
+html.light .ftgs-seo-intro p{color:#141004}
+.ftgs-seo-intro p a{color:#7034fd;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;transition:color .2s var(--ease)}
+.ftgs-seo-intro p a:hover{color:#fedb62}
