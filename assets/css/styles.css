@@ -1897,41 +1897,43 @@ ul.products.ftgs-home-products{
 .btn-gold{background:var(--gold);color:#0a0a0a;box-shadow:0 0 0 1px var(--gold),0 8px 24px -8px rgba(254,219,98,.5)}
 .btn-gold:hover{background:#ffd97a;color:#0a0a0a;transform:translateY(-2px);box-shadow:0 0 0 1px #ffd97a,0 12px 32px -8px rgba(254,219,98,.6)}
 
-/* ---- Hero slider ---- */
-.ftgs-hero-slider{position:relative;width:100%;height:min(70vh,640px);min-height:420px;overflow:hidden;background:#000;margin-top:0}
+/* ---- Hero slider (matches the live Elementor background-slideshow look) ---- */
+/* Full-bleed, content-bottom aligned, minimal bottom gradient for legibility. */
+.ftgs-hero-slider{position:relative;width:100%;height:640px;min-height:480px;overflow:hidden;background:#000;margin-top:0}
 .ftgs-hero-track{position:absolute;inset:0}
-.ftgs-hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1s var(--ease);display:flex;align-items:center;justify-content:center}
-.ftgs-hero-slide.is-active{opacity:1;z-index:1}
-.ftgs-hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.78) 0%,rgba(0,0,0,.4) 50%,rgba(0,0,0,.2) 100%)}
-.ftgs-hero-overlay-light{background:linear-gradient(to right,rgba(255,255,255,.78) 0%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.2) 100%)}
-.ftgs-hero-inner{position:relative;z-index:2;text-align:center;padding:0 32px;max-width:760px}
-.ftgs-hero-heading{font-family:var(--display);font-size:clamp(2.2rem,6vw,4.5rem);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin:0 0 16px;text-shadow:0 2px 20px rgba(0,0,0,.3)}
-.ftgs-hero-subheading{font-size:clamp(1rem,2vw,1.3rem);line-height:1.5;margin:0 0 28px;max-width:600px;margin-left:auto;margin-right:auto;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+.ftgs-hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:translateY(8%);transition:opacity .5s ease,transform .6s cubic-bezier(.22,1,.36,1);display:flex;align-items:flex-end;justify-content:flex-start}
+.ftgs-hero-slide.is-active{opacity:1;transform:translateY(0);z-index:1}
+/* Subtle bottom-only gradient — keeps the image visible while making text legible */
+.ftgs-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 35%,rgba(0,0,0,.55) 100%)}
+.ftgs-hero-overlay-light{background:linear-gradient(to bottom,rgba(255,255,255,0) 35%,rgba(255,255,255,.6) 100%)}
+.ftgs-hero-inner{position:relative;z-index:2;text-align:left;padding:0 48px 56px;max-width:1400px;margin:0 auto;width:100%}
+.ftgs-hero-heading{font-family:var(--nav-font);font-size:clamp(2.4rem,6vw,5rem);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.ftgs-hero-subheading{font-size:clamp(1rem,2vw,1.3rem);line-height:1.5;margin:0 0 24px;max-width:560px;text-shadow:0 1px 12px rgba(0,0,0,.6)}
 /* Text color variants */
 .ftgs-hero-text-light .ftgs-hero-heading,.ftgs-hero-text-light .ftgs-hero-subheading{color:#fff}
 .ftgs-hero-text-dark .ftgs-hero-heading,.ftgs-hero-text-dark .ftgs-hero-subheading{color:#0a0a0a}
 
 /* Arrows */
-.ftgs-hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease);backdrop-filter:blur(8px)}
-.ftgs-hero-arrow:hover{background:var(--gold);border-color:var(--gold);color:#0a0a0a}
+.ftgs-hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.25);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease),opacity .3s var(--ease);backdrop-filter:blur(6px);opacity:.8}
+.ftgs-hero-arrow:hover{background:var(--gold);border-color:var(--gold);color:#0a0a0a;opacity:1}
 .ftgs-hero-arrow svg{width:22px;height:22px}
 .ftgs-hero-prev{left:24px}
 .ftgs-hero-next{right:24px}
 
 /* Dots */
-.ftgs-hero-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:10px}
-.ftgs-hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4);border:none;cursor:pointer;padding:0;transition:background .2s var(--ease),width .2s var(--ease)}
-.ftgs-hero-dot.is-active{background:var(--gold);width:28px;border-radius:5px}
+.ftgs-hero-dots{position:absolute;bottom:24px;right:48px;z-index:3;display:flex;gap:8px}
+.ftgs-hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);border:none;cursor:pointer;padding:0;transition:background .2s var(--ease),width .2s var(--ease)}
+.ftgs-hero-dot.is-active{background:var(--gold);width:24px;border-radius:4px}
 
 /* Responsive slider */
 @media (max-width: 768px){
-  .ftgs-hero-slider{height:min(60vh,480px);min-height:360px}
+  .ftgs-hero-slider{height:520px;min-height:380px}
+  .ftgs-hero-inner{padding:0 24px 40px}
   .ftgs-hero-arrow{width:38px;height:38px}
   .ftgs-hero-arrow svg{width:18px;height:18px}
   .ftgs-hero-prev{left:12px}
   .ftgs-hero-next{right:12px}
-  .ftgs-hero-overlay{background:linear-gradient(to bottom,rgba(0,0,0,.4) 0%,rgba(0,0,0,.85) 100%)}
-  .ftgs-hero-inner{padding:0 24px}
+  .ftgs-hero-dots{right:24px;bottom:18px}
 }
 
 /* ---- Discreet shipping band (replaces the 4-item SaaS value props) ---- */
